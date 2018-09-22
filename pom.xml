@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <name>AmaronUI Layouts</name>
+    <groupId>com.dukescript.amaronui</groupId>
+    <artifactId>layouts</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <url>http://dukescript.com</url>
+    <description>Layout algorithms writen in Java without dependency on specific ui technology. Components for different ui technologies using these algorithms.</description>
+    
+    <developers>
+        <developer>
+            <id>dukescript</id>
+            <name>Anton Epple</name>
+            <email>toni.epple@dukescrip.com</email>
+            <organization>Dukehoff GmbH</organization>
+            <organizationUrl>http://www.dukescript.com</organizationUrl>
+            <roles>
+                <role>Project-Administrator</role>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+    
+    <licenses>
+        <license>
+            <name>GNU General Public License, version 2, with the Classpath Exception</name>
+            <url>http://dukescript.com/legal/gplv2+ce.html</url>    
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git:https://github.com/amaronui/amaronui-layouts.git</connection>
+        <url>https://github.com/amaronui/amaronui-layouts.git</url>
+        <developerConnection>scm:git:https://github.com/amaronui/amaronui-layouts.git</developerConnection>
+        <tag>release-${releaseVersion}</tag>
+    </scm>
+    <modules>
+        <module>flexbox</module>
+        <module>jfxflexbox</module>
+        <module>iosflexbox</module>
+        <module>gplv2cpe-license-resolver</module>
+    </modules>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.3</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.1</version>
+                <configuration>
+                    <groups>
+                        <group>
+                            <title>DukeScript Layouts</title>
+                            <packages>com.dukescript.layouts</packages>
+                        </group>
+                    </groups>
+                    <nodeprecated>true</nodeprecated>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.3.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <DependencyConvergence />
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>              
+            </plugin>
+        </plugins>
+    </build>
+    
+    
+    <profiles> 
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>javadoc</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <phase>prepare-package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>license</id>
+            <activation>
+                <property>
+                    <name>!skipLicenses</name>
+                </property>
+            </activation>
+            <build>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>license-maven-plugin</artifactId>
+                            <version>1.16</version>
+                            <configuration>
+                                <inceptionYear>2018</inceptionYear>
+                                <organizationName>Dukehoff GmbH</organizationName>
+                                <licenseName>gplv2_ce</licenseName>
+                                <licenseResolver>classpath://license</licenseResolver>
+                                <failOnMissingHeader>true</failOnMissingHeader>
+                                <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
+                                <failIfWarning>true</failIfWarning>
+                                <!--<dryRun>true</dryRun>
+                                failOnMissingHeader is supposed to only work with this
+                                property set, but I can't see a difference -->
+                                <!--<canUpdateDescription>true</canUpdateDescription>
+                                this causes the build to fail no matter what-->
+                                <canUpdateCopyright>true</canUpdateCopyright>
+                                <descriptionTemplate>src/license/header.ftl</descriptionTemplate>                            
+                                <roots>
+                                    <root>src/main/java</root>
+                                    <root>src/test</root>
+                                </roots>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>first</id>
+                                    <phase>generate-sources</phase>
+                                    <goals>
+                                        <goal>update-file-header</goal>     
+                                    </goals>
+                                </execution>
+                                <execution>
+                                    <phase>verify</phase>
+                                    <goals>
+                                        <goal>check-file-header</goal>     
+                                    </goals>
+                                </execution>
+                            </executions>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>com.dukescript</groupId>
+                                    <artifactId>gplv2cpe-license-resolver</artifactId>
+                                    <version>1.0</version>
+                                </dependency>
+                            </dependencies>
+                        </plugin>
+                    </plugins>
+            </build>
+            
+        </profile>
+        
+    </profiles>
+    
+</project>

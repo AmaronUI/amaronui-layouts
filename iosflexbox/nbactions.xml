@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Run on ipad</actionName>
+            <displayName>Run on ipad</displayName>
+            <goals>
+                <goal>compile</goal>
+                <goal>robovm:ipad-sim</goal>
+            </goals>
+        </action>
+    </actions>
