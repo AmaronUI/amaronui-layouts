@@ -42,6 +42,7 @@
         <module>jfxflexbox</module>
         <module>iosflexbox</module>
         <module>gplv2cpe-license-resolver</module>
+        <module>grid</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
