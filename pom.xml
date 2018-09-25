@@ -217,9 +217,9 @@
                             </executions>
                             <dependencies>
                                 <dependency>
-                                    <groupId>com.dukescript</groupId>
+                                    <groupId>com.dukescript.amaronui</groupId>
                                     <artifactId>gplv2cpe-license-resolver</artifactId>
-                                    <version>1.0</version>
+                                    <version>${project.version}</version>
                                 </dependency>
                             </dependencies>
                         </plugin>
