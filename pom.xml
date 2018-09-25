@@ -6,7 +6,7 @@
     <artifactId>layouts</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <url>http://dukescript.com</url>
+    <url>http://amaronui.com</url>
     <description>Layout algorithms writen in Java without dependency on specific ui technology. Components for different ui technologies using these algorithms.</description>
     
     <developers>
