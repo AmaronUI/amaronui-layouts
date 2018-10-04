@@ -30,8 +30,14 @@ package com.dukescript.layouts.flexbox;
  * #L%
  */
 
+import com.dukescript.layouts.flexbox.FlexboxLayout.AlignContent;
+import com.dukescript.layouts.flexbox.FlexboxLayout.AlignItems;
 import com.dukescript.layouts.flexbox.FlexboxLayout.DefaultFlexItem;
+import com.dukescript.layouts.flexbox.FlexboxLayout.FlexDirection;
+import com.dukescript.layouts.flexbox.FlexboxLayout.FlexItem.AlignSelf;
 import com.dukescript.layouts.flexbox.FlexboxLayout.FlexItemBase;
+import com.dukescript.layouts.flexbox.FlexboxLayout.FlexWrap;
+import com.dukescript.layouts.flexbox.FlexboxLayout.JustifyContent;
 import java.util.List;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -58,8 +64,8 @@ public class FlexBoxLayoutTest {
     @Test
     public void testCalculateFlexLinesNumLines() {
         FlexboxLayout flexboxLayout = new FlexboxLayout();
-        flexboxLayout.setFlexDirection(FlexboxLayout.FLEX_DIRECTION_ROW);
-        flexboxLayout.setFlexWrap(FlexboxLayout.FLEX_WRAP_NOWRAP);
+        flexboxLayout.setFlexDirection(FlexDirection.ROW);
+        flexboxLayout.setFlexWrap(FlexWrap.NOWRAP);
 
         for (int i = 0; i < 3; i++) {
             DefaultFlexItem flexItemImpl = new DefaultFlexItem();
@@ -70,7 +76,7 @@ public class FlexBoxLayoutTest {
         flexboxLayout.sortChildren();
         flexboxLayout.calculateFlexLines(100);
         Assert.assertEquals(1, flexboxLayout.flexLines.size());
-        flexboxLayout.setFlexWrap(FlexboxLayout.FLEX_WRAP_WRAP);
+        flexboxLayout.setFlexWrap(FlexWrap.WRAP);
         flexboxLayout.calculateFlexLines(100);
         Assert.assertEquals(2, flexboxLayout.flexLines.size());
         Assert.assertEquals(100, flexboxLayout.flexLines.get(0).getMinMainSize(), 0.0001);
@@ -100,8 +106,8 @@ public class FlexBoxLayoutTest {
     @Test
     public void testOrder() {
         FlexboxLayout flexboxLayout = new FlexboxLayout();
-        flexboxLayout.setFlexDirection(FlexboxLayout.FLEX_DIRECTION_ROW);
-        flexboxLayout.setFlexWrap(FlexboxLayout.FLEX_WRAP_WRAP);
+        flexboxLayout.setFlexDirection(FlexDirection.ROW);
+        flexboxLayout.setFlexWrap(FlexWrap.WRAP);
 
         FlexItemBase flexItemImpl1 = DefaultFlexItem.builder().minWidth(50).build();
         flexboxLayout.add(flexItemImpl1);
@@ -121,8 +127,8 @@ public class FlexBoxLayoutTest {
     @Test
     public void testCalculateFlexLinesReversion() {
         FlexboxLayout flexboxLayout = new FlexboxLayout();
-        flexboxLayout.setFlexDirection(FlexboxLayout.FLEX_DIRECTION_ROW);
-        flexboxLayout.setFlexWrap(FlexboxLayout.FLEX_WRAP_WRAP);
+        flexboxLayout.setFlexDirection(FlexDirection.ROW);
+        flexboxLayout.setFlexWrap(FlexWrap.WRAP);
 
         for (int i = 0; i < 3; i++) {
             DefaultFlexItem flexItemImpl = new DefaultFlexItem();
@@ -132,7 +138,7 @@ public class FlexBoxLayoutTest {
         flexboxLayout.sortChildren();
         flexboxLayout.calculateFlexLines(100);
         Assert.assertEquals(2, flexboxLayout.flexLines.get(0).getFlexItems().size());
-        flexboxLayout.setFlexWrap(FlexboxLayout.FLEX_WRAP_WRAP_REVERSE);
+        flexboxLayout.setFlexWrap(FlexWrap.WRAP_REVERSE);
         flexboxLayout.calculateFlexLines(100);
         Assert.assertEquals(1, flexboxLayout.flexLines.get(0).getFlexItems().size());
     }
@@ -154,17 +160,17 @@ public class FlexBoxLayoutTest {
         flexLine.addFlexItem(flexItemImpl2);
         flexLine.addFlexItem(flexItemImpl3);
         FlexboxLayout flexboxLayout = new FlexboxLayout();
-        flexboxLayout.setJustifyContent(FlexboxLayout.JUSTIFY_CONTENT_FLEX_END);
+        flexboxLayout.setJustifyContent(JustifyContent.FLEX_END);
         flexboxLayout.applyJustifyContent(flexLine, true, 200);
         Assert.assertEquals(50, flexLine.getFlexItems().get(0).getMainStartPos(), 0.01);
-        flexboxLayout.setJustifyContent(FlexboxLayout.JUSTIFY_CONTENT_FLEX_START);
+        flexboxLayout.setJustifyContent(JustifyContent.FLEX_START);
         flexboxLayout.applyJustifyContent(flexLine, true, 200);
         Assert.assertEquals(0, flexLine.getFlexItems().get(0).getMainStartPos(), 0.01);
-        flexboxLayout.setJustifyContent(FlexboxLayout.JUSTIFY_CONTENT_SPACE_AROUND);
+        flexboxLayout.setJustifyContent(JustifyContent.SPACE_AROUND);
         flexboxLayout.applyJustifyContent(flexLine, true, 200);
         Assert.assertEquals(8.3333, flexLine.getFlexItems().get(0).getMainStartPos(), 0.01);
         Assert.assertEquals(75, flexLine.getFlexItems().get(1).getMainStartPos(), 0.01);
-        flexboxLayout.setJustifyContent(FlexboxLayout.JUSTIFY_CONTENT_SPACE_BETWEEN);
+        flexboxLayout.setJustifyContent(JustifyContent.SPACE_BETWEEN);
         flexboxLayout.applyJustifyContent(flexLine, true, 200);
         Assert.assertEquals(0, flexLine.getFlexItems().get(0).getMainStartPos(), 0.01);
         Assert.assertEquals(75, flexLine.getFlexItems().get(1).getMainStartPos(), 0.01);
@@ -193,9 +199,9 @@ public class FlexBoxLayoutTest {
     @Test
     public void testAlignContent() {
         FlexboxLayout flexboxLayout = new FlexboxLayout();
-        flexboxLayout.setFlexDirection(FlexboxLayout.FLEX_DIRECTION_ROW);
-        flexboxLayout.setFlexWrap(FlexboxLayout.FLEX_WRAP_WRAP);
-        flexboxLayout.setAlignContent(FlexboxLayout.ALIGN_CONTENT_FLEX_START);
+        flexboxLayout.setFlexDirection(FlexDirection.ROW);
+        flexboxLayout.setFlexWrap(FlexWrap.WRAP);
+        flexboxLayout.setAlignContent(AlignContent.FLEX_START);
         for (int i = 0; i < 3; i++) {
             DefaultFlexItem flexItemImpl = new DefaultFlexItem();
             flexItemImpl.setMinWidth(51);
@@ -208,19 +214,19 @@ public class FlexBoxLayoutTest {
         Assert.assertEquals(60, flexboxLayout.getMinCrossSize(), 0.001);
         List<FlexboxLayout.FlexLine> flexLines = flexboxLayout.flexLines;
         Assert.assertEquals(40, flexLines.get(2).getCrossStartPos(), 0.001);
-        flexboxLayout.setAlignContent(FlexboxLayout.ALIGN_CONTENT_FLEX_END);
+        flexboxLayout.setAlignContent(AlignContent.FLEX_END);
         flexboxLayout.calculateFlexLines(100);
         flexboxLayout.alignContent(500);
         Assert.assertEquals(480, flexboxLayout.flexLines.get(2).getCrossStartPos(), 0.01);
-        flexboxLayout.setAlignContent(FlexboxLayout.ALIGN_CONTENT_CENTER);
+        flexboxLayout.setAlignContent(AlignContent.CENTER);
         flexboxLayout.calculateFlexLines(100);
         flexboxLayout.alignContent(500);
         Assert.assertEquals(260, flexboxLayout.flexLines.get(2).getCrossStartPos(), 0.01);
-        flexboxLayout.setAlignContent(FlexboxLayout.ALIGN_CONTENT_SPACE_AROUND);
+        flexboxLayout.setAlignContent(AlignContent.SPACE_AROUND);
         flexboxLayout.calculateFlexLines(100);
         flexboxLayout.alignContent(500);
         Assert.assertEquals(406.6666666666666, flexboxLayout.flexLines.get(2).getCrossStartPos(), 0.01);
-        flexboxLayout.setAlignContent(FlexboxLayout.ALIGN_CONTENT_SPACE_BETWEEN);
+        flexboxLayout.setAlignContent(AlignContent.SPACE_BETWEEN);
         flexboxLayout.calculateFlexLines(100);
         flexboxLayout.alignContent(500);
         Assert.assertEquals(480, flexboxLayout.flexLines.get(2).getCrossStartPos(), 0.01);
@@ -229,9 +235,9 @@ public class FlexBoxLayoutTest {
     @Test
     public void testAlignItems() {
         FlexboxLayout layout = new FlexboxLayout();
-        layout.setFlexWrap(FlexboxLayout.FLEX_WRAP_WRAP);
-        layout.setFlexDirection(FlexboxLayout.FLEX_DIRECTION_ROW);
-        layout.setAlignItems(FlexboxLayout.ALIGN_ITEMS_FLEX_START);
+        layout.setFlexWrap(FlexWrap.WRAP);
+        layout.setFlexDirection(FlexDirection.ROW);
+        layout.setAlignItems(AlignItems.FLEX_START);
         DefaultFlexItem flexItem = DefaultFlexItem.builder().minWidth(100).minHeight(10).build();
         DefaultFlexItem flexItem2 = DefaultFlexItem.builder().minWidth(100).minHeight(50).build();
         layout.add(flexItem);
@@ -240,19 +246,19 @@ public class FlexBoxLayoutTest {
         Assert.assertEquals(0, flexItem.crossStartPos, 0.001);
         Assert.assertEquals(0, flexItem2.crossStartPos, 0.001);
 
-        layout.setAlignItems(FlexboxLayout.ALIGN_ITEMS_FLEX_END);
+        layout.setAlignItems(AlignItems.FLEX_END);
         layout.layoutSubViews(250, 200);
         Assert.assertEquals(40, flexItem.crossStartPos, 0.001);
         Assert.assertEquals(0, flexItem2.crossStartPos, 0.001);
-        layout.setAlignItems(FlexboxLayout.ALIGN_ITEMS_CENTER);
+        layout.setAlignItems(AlignItems.CENTER);
         layout.layoutSubViews(250, 200);
         Assert.assertEquals(20, flexItem.crossStartPos, 0.001);
         Assert.assertEquals(0, flexItem2.crossStartPos, 0.001);
-        layout.setAlignItems(FlexboxLayout.ALIGN_ITEMS_CENTER);
+        layout.setAlignItems(AlignItems.CENTER);
         layout.layoutSubViews(250, 200);
         Assert.assertEquals(20, flexItem.crossStartPos, 0.001);
         Assert.assertEquals(0, flexItem2.crossStartPos, 0.001);
-        layout.setAlignItems(FlexboxLayout.ALIGN_ITEMS_STRETCH);
+        layout.setAlignItems(AlignItems.STRETCH);
         layout.layoutSubViews(250, 200);
         Assert.assertEquals(0, flexItem.crossStartPos, 0.001);
         Assert.assertEquals(50, flexItem.crossTargetSize, 0.001);
@@ -262,10 +268,10 @@ public class FlexBoxLayoutTest {
     @Test
     public void testAlignSelf() {
         FlexboxLayout layout = new FlexboxLayout();
-        layout.setFlexWrap(FlexboxLayout.FLEX_WRAP_WRAP);
-        layout.setFlexDirection(FlexboxLayout.FLEX_DIRECTION_ROW);
-        layout.setAlignItems(FlexboxLayout.ALIGN_ITEMS_FLEX_START);
-        DefaultFlexItem flexItem = DefaultFlexItem.builder().minWidth(100).minHeight(10).flexAlignSelf(FlexboxLayout.FlexItem.ALIGN_SELF_FLEX_END).build();
+        layout.setFlexWrap(FlexWrap.WRAP);
+        layout.setFlexDirection(FlexDirection.ROW);
+        layout.setAlignItems(AlignItems.FLEX_START);
+        DefaultFlexItem flexItem = DefaultFlexItem.builder().minWidth(100).minHeight(10).flexAlignSelf(AlignSelf.FLEX_END).build();
         DefaultFlexItem flexItem2 = DefaultFlexItem.builder().minWidth(100).minHeight(50).build();
         layout.add(flexItem);
         layout.add(flexItem2);
@@ -277,9 +283,9 @@ public class FlexBoxLayoutTest {
     @Test
     public void testMarginAlignItems() {
         FlexboxLayout layout = new FlexboxLayout();
-        layout.setFlexWrap(FlexboxLayout.FLEX_WRAP_WRAP);
-        layout.setFlexDirection(FlexboxLayout.FLEX_DIRECTION_ROW);
-        layout.setAlignItems(FlexboxLayout.ALIGN_ITEMS_STRETCH);
+        layout.setFlexWrap(FlexWrap.WRAP);
+        layout.setFlexDirection(FlexDirection.ROW);
+        layout.setAlignItems(AlignItems.STRETCH);
         DefaultFlexItem flexItem = DefaultFlexItem.builder().minWidth(100).minHeight(10)
                 .marginTop(5).marginBottom(5).marginLeft(5).marginRight(5).build();
         DefaultFlexItem flexItem2 = DefaultFlexItem.builder().minWidth(100).minHeight(50)
@@ -304,9 +310,9 @@ public class FlexBoxLayoutTest {
     @Test
     public void testMargin() {
         FlexboxLayout layout = new FlexboxLayout();
-        layout.setFlexWrap(FlexboxLayout.FLEX_WRAP_WRAP);
-        layout.setFlexDirection(FlexboxLayout.FLEX_DIRECTION_ROW);
-        layout.setAlignContent(FlexboxLayout.ALIGN_CONTENT_FLEX_START);
+        layout.setFlexWrap(FlexWrap.WRAP);
+        layout.setFlexDirection(FlexDirection.ROW);
+        layout.setAlignContent(AlignContent.FLEX_START);
         DefaultFlexItem flexItem = DefaultFlexItem.builder().minWidth(100).minHeight(20)
                 .marginTop(5).marginBottom(5).marginLeft(5).marginRight(5).build();
         DefaultFlexItem flexItem2 = DefaultFlexItem.builder().minWidth(100).minHeight(20)

@@ -31,6 +31,7 @@ package com.dukescript.layouts.iosflexbox;
  */
 
 import com.dukescript.layouts.flexbox.FlexboxLayout;
+import com.dukescript.layouts.flexbox.FlexboxLayout.FlexItem.AlignSelf;
 import org.robovm.apple.uikit.NSLayoutConstraint;
 
 /**
@@ -56,7 +57,7 @@ public class FlexBoxlayoutParams extends NSLayoutConstraint {
         private int order = 0;
         private float flexGrow = 0;
         private float flexShrink = 1;
-        private int alignSelf = FlexboxLayout.DefaultFlexItem.ALIGN_SELF_AUTO;
+        private AlignSelf alignSelf = AlignSelf.AUTO;
         private float flexBasisPercent = -1f;
         private double minWidth = 10;
         private double minHeight = 10;
@@ -88,11 +89,11 @@ public class FlexBoxlayoutParams extends NSLayoutConstraint {
             this.flexShrink = flexShrink;
         }
 
-        public int getAlignSelf() {
+        public AlignSelf getAlignSelf() {
             return alignSelf;
         }
 
-        public void setAlignSelf(int alignSelf) {
+        public void setAlignSelf(AlignSelf alignSelf) {
             this.alignSelf = alignSelf;
         }
 

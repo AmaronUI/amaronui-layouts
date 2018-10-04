@@ -31,6 +31,11 @@ package com.dukescript.layouts.jfxflexbox;
  */
 import com.dukescript.layouts.flexbox.Bounds;
 import com.dukescript.layouts.flexbox.FlexboxLayout;
+import com.dukescript.layouts.flexbox.FlexboxLayout.AlignContent;
+import com.dukescript.layouts.flexbox.FlexboxLayout.AlignItems;
+import com.dukescript.layouts.flexbox.FlexboxLayout.FlexDirection;
+import com.dukescript.layouts.flexbox.FlexboxLayout.FlexWrap;
+import com.dukescript.layouts.flexbox.FlexboxLayout.JustifyContent;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -90,9 +95,9 @@ public class FlexBoxPane extends Pane {
     private ListChangeListener childwatch;
 
     public FlexBoxPane() {
-        layout.setFlexDirection(FlexboxLayout.FLEX_DIRECTION_ROW);
-        layout.setFlexWrap(FlexboxLayout.FLEX_WRAP_WRAP_REVERSE);
-        layout.setJustifyContent(FlexboxLayout.JUSTIFY_CONTENT_CENTER);
+        layout.setFlexDirection(FlexDirection.ROW);
+        layout.setFlexWrap(FlexWrap.WRAP_REVERSE);
+        layout.setJustifyContent(JustifyContent.CENTER);
     }
 
     
@@ -223,38 +228,38 @@ public class FlexBoxPane extends Pane {
     }
 
     private double getCrossSize() {
-        return layout.getFlexDirection() == FlexboxLayout.FLEX_DIRECTION_ROW
-                || layout.getFlexDirection() == FlexboxLayout.FLEX_DIRECTION_ROW_REVERSE
+        return layout.getFlexDirection() == FlexDirection.ROW
+                || layout.getFlexDirection() == FlexDirection.ROW_REVERSE
                 ? getHeight() : getWidth();
     }
 
     private double getMainSize() {
-        return layout.getFlexDirection() == FlexboxLayout.FLEX_DIRECTION_COLUMN
-                || layout.getFlexDirection() == FlexboxLayout.FLEX_DIRECTION_COLUMN_REVERSE
+        return layout.getFlexDirection() == FlexDirection.COLUMN
+                || layout.getFlexDirection() == FlexDirection.COLUMN_REVERSE
                 ? getHeight() : getWidth();
     }
 
-    public void setJustifyContent(int ordinal) {
+    public void setJustifyContent(JustifyContent ordinal) {
         layout.setJustifyContent(ordinal);
         requestLayout();
     }
 
-    public void setFlexWrap(int ordinal) {
+    public void setFlexWrap(FlexWrap ordinal) {
         layout.setFlexWrap(ordinal);
         requestLayout();
     }
 
-    public void setFlexDirection(int ordinal) {
+    public void setFlexDirection(FlexDirection ordinal) {
         layout.setFlexDirection(ordinal);
         requestLayout();
     }
 
-    public void setAlignItems(int ordinal) {
+    public void setAlignItems(AlignItems ordinal) {
         layout.setAlignItems(ordinal);
         requestLayout();
     }
 
-    public void setAlignContent(int ordinal) {
+    public void setAlignContent(AlignContent ordinal) {
         layout.setAlignContent(ordinal);
         requestLayout();
     }
@@ -352,8 +357,8 @@ public class FlexBoxPane extends Pane {
         }
 
         @Override
-        public int getFlexAlignSelf() {
-            return (int) getConstraint(delegate, FLEX_ALIGN_SELF, FlexboxLayout.FlexItem.ALIGN_SELF_AUTO);
+        public AlignSelf getFlexAlignSelf() {
+            return (AlignSelf) getConstraint(delegate, FLEX_ALIGN_SELF, AlignSelf.AUTO);
         }
 
     }

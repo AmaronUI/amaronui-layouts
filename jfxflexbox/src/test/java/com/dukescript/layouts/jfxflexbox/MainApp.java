@@ -31,6 +31,11 @@ package com.dukescript.layouts.jfxflexbox;
  */
 
 import com.dukescript.layouts.flexbox.FlexboxLayout;
+import com.dukescript.layouts.flexbox.FlexboxLayout.AlignContent;
+import com.dukescript.layouts.flexbox.FlexboxLayout.AlignItems;
+import com.dukescript.layouts.flexbox.FlexboxLayout.FlexDirection;
+import com.dukescript.layouts.flexbox.FlexboxLayout.FlexWrap;
+import com.dukescript.layouts.flexbox.FlexboxLayout.JustifyContent;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
@@ -52,70 +57,69 @@ public class MainApp extends Application {
         BorderPane root = new BorderPane();
         FlexBoxPane flex = new FlexBoxPane();
 
-        ObservableList<JustifyItem> justifyChoices = FXCollections.observableArrayList();
-        justifyChoices.add(JustifyItem.JUSTIFY_CONTENT_CENTER);
-        justifyChoices.add(JustifyItem.JUSTIFY_CONTENT_FLEX_END);
-        justifyChoices.add(JustifyItem.JUSTIFY_CONTENT_FLEX_START);
-        justifyChoices.add(JustifyItem.JUSTIFY_CONTENT_SPACE_AROUND);
-        justifyChoices.add(JustifyItem.JUSTIFY_CONTENT_SPACE_BETWEEN);
-        ChoiceBox<JustifyItem> justifyContent = new ChoiceBox<>(justifyChoices);
+        ObservableList<JustifyContent> justifyChoices = FXCollections.observableArrayList();
+        justifyChoices.add(JustifyContent.CENTER);
+        justifyChoices.add(JustifyContent.FLEX_END);
+        justifyChoices.add(JustifyContent.FLEX_START);
+        justifyChoices.add(JustifyContent.SPACE_AROUND);
+        justifyChoices.add(JustifyContent.SPACE_BETWEEN);
+        ChoiceBox<JustifyContent> justifyContent = new ChoiceBox<>(justifyChoices);
         justifyContent.setOnAction(e -> {
-            JustifyItem selectedItem = justifyContent.getSelectionModel().getSelectedItem();
-            flex.setJustifyContent(selectedItem.ordinal());
-         
+            JustifyContent selectedItem = justifyContent.getSelectionModel().getSelectedItem();
+            flex.setJustifyContent(selectedItem);       
         });
-        justifyContent.getSelectionModel().select(JustifyItem.JUSTIFY_CONTENT_FLEX_START);
+        justifyContent.getSelectionModel().select(JustifyContent.FLEX_START);
         ObservableList<FlexWrap> flexWrapChoices = FXCollections.observableArrayList();
-        flexWrapChoices.add(FlexWrap.FLEX_WRAP_NOWRAP);
-        flexWrapChoices.add(FlexWrap.FLEX_WRAP_WRAP);
-        flexWrapChoices.add(FlexWrap.FLEX_WRAP_WRAP_REVERSE);
+        flexWrapChoices.add(FlexWrap.NOWRAP);
+        flexWrapChoices.add(FlexWrap.WRAP);
+        flexWrapChoices.add(FlexWrap.WRAP_REVERSE);
 
         ChoiceBox<FlexWrap> flexWrap = new ChoiceBox<>(flexWrapChoices);
         flexWrap.setOnAction(e -> {
             FlexWrap selectedItem = flexWrap.getSelectionModel().getSelectedItem();
-            flex.setFlexWrap(selectedItem.ordinal());
+            flex.setFlexWrap(selectedItem);
         });
-        flexWrap.getSelectionModel().select(FlexWrap.FLEX_WRAP_WRAP);
+        flexWrap.getSelectionModel().select(FlexWrap.WRAP);
         ObservableList<FlexDirection> flexDirectionChoices = FXCollections.observableArrayList();
-        flexDirectionChoices.add(FlexDirection.FLEX_DIRECTION_COLUMN);
-        flexDirectionChoices.add(FlexDirection.FLEX_DIRECTION_COLUMN_REVERSE);
-        flexDirectionChoices.add(FlexDirection.FLEX_DIRECTION_ROW);
-        flexDirectionChoices.add(FlexDirection.FLEX_DIRECTION_ROW_REVERSE);
+        flexDirectionChoices.add(FlexDirection.COLUMN);
+        flexDirectionChoices.add(FlexDirection.COLUMN_REVERSE);
+        flexDirectionChoices.add(FlexDirection.ROW);
+        flexDirectionChoices.add(FlexDirection.ROW_REVERSE);
 
         ChoiceBox<FlexDirection> flexDirection = new ChoiceBox<>(flexDirectionChoices);
         flexDirection.setOnAction(e -> {
             FlexDirection selectedItem = flexDirection.getSelectionModel().getSelectedItem();
-            flex.setFlexDirection(selectedItem.ordinal());
+            flex.setFlexDirection(selectedItem);
         });
-        flexDirection.getSelectionModel().select(FlexDirection.FLEX_DIRECTION_ROW);
+        flexDirection.getSelectionModel().select(FlexDirection.ROW);
 
-        ObservableList<FlexAlignItems> flexAlignItemsChoices = FXCollections.observableArrayList();
-        flexAlignItemsChoices.add(FlexAlignItems.ALIGN_ITEMS_BASELINE);
-        flexAlignItemsChoices.add(FlexAlignItems.ALIGN_ITEMS_CENTER);
-        flexAlignItemsChoices.add(FlexAlignItems.ALIGN_ITEMS_FLEX_END);
-        flexAlignItemsChoices.add(FlexAlignItems.ALIGN_ITEMS_FLEX_START);
-        flexAlignItemsChoices.add(FlexAlignItems.ALIGN_ITEMS_STRETCH);
+        ObservableList<AlignItems> flexAlignItemsChoices = FXCollections.observableArrayList();
+        flexAlignItemsChoices.add(AlignItems.BASELINE);
+        flexAlignItemsChoices.add(AlignItems.CENTER);
+        flexAlignItemsChoices.add(AlignItems.FLEX_END);
+        flexAlignItemsChoices.add(AlignItems.FLEX_START);
+        flexAlignItemsChoices.add(AlignItems.STRETCH);
 
-        ChoiceBox<FlexAlignItems> flexAlignItems = new ChoiceBox<>(flexAlignItemsChoices);
+        ChoiceBox<AlignItems> flexAlignItems = new ChoiceBox<>(flexAlignItemsChoices);
         flexAlignItems.setOnAction(e -> {
-            FlexAlignItems selectedItem = flexAlignItems.getSelectionModel().getSelectedItem();
-            flex.setAlignItems(selectedItem.ordinal());
+            AlignItems selectedItem = flexAlignItems.getSelectionModel().getSelectedItem();
+            flex.setAlignItems(selectedItem);
         });
-        flexAlignItems.getSelectionModel().select(FlexAlignItems.ALIGN_ITEMS_FLEX_START);
-        ObservableList<FlexAlignContent> flexAlignContentChoices = FXCollections.observableArrayList();
-        flexAlignContentChoices.add(FlexAlignContent.ALIGN_CONTENT_CENTER);
-        flexAlignContentChoices.add(FlexAlignContent.ALIGN_CONTENT_FLEX_END);
-        flexAlignContentChoices.add(FlexAlignContent.ALIGN_CONTENT_FLEX_START);
-        flexAlignContentChoices.add(FlexAlignContent.ALIGN_CONTENT_SPACE_AROUND);
-        flexAlignContentChoices.add(FlexAlignContent.ALIGN_CONTENT_SPACE_BETWEEN);
-        flexAlignContentChoices.add(FlexAlignContent.ALIGN_CONTENT_STRETCH);
+        flexAlignItems.getSelectionModel().select(AlignItems.FLEX_START);
+        ObservableList<AlignContent> flexAlignContentChoices = FXCollections.observableArrayList();
+        flexAlignContentChoices.add(FlexboxLayout.AlignContent.CENTER);
+        flexAlignContentChoices.add(AlignContent.FLEX_END);
+        flexAlignContentChoices.add(AlignContent.FLEX_START);
+        flexAlignContentChoices.add(AlignContent.SPACE_AROUND);
+        flexAlignContentChoices.add(AlignContent.SPACE_BETWEEN);
+        flexAlignContentChoices.add(AlignContent.STRETCH);
 
-        ChoiceBox<FlexAlignContent> flexAlignContent = new ChoiceBox<>(flexAlignContentChoices);
+        ChoiceBox<AlignContent> flexAlignContent = new ChoiceBox<>(flexAlignContentChoices);
         flexAlignContent.setOnAction(e -> {
-            FlexAlignContent selectedItem = flexAlignContent.getSelectionModel().getSelectedItem();
-            flex.setAlignContent(selectedItem.ordinal());
+            AlignContent selectedItem = flexAlignContent.getSelectionModel().getSelectedItem();
+            flex.setAlignContent(selectedItem);
         });
-        flexAlignContent.getSelectionModel().select(FlexAlignContent.ALIGN_CONTENT_CENTER);
+        flexAlignContent.getSelectionModel().select(AlignContent.CENTER);
 
         VBox toolbar = new VBox(flexWrap, flexDirection, justifyContent, flexAlignContent, flexAlignItems);
         toolbar.setAlignment(Pos.CENTER);
@@ -162,27 +166,5 @@ public class MainApp extends Application {
         launch(args);
     }
 
-    private enum JustifyItem {
-        JUSTIFY_CONTENT_FLEX_START, JUSTIFY_CONTENT_FLEX_END, JUSTIFY_CONTENT_CENTER,
-        JUSTIFY_CONTENT_SPACE_BETWEEN, JUSTIFY_CONTENT_SPACE_AROUND;
-    }
-
-    private enum FlexWrap {
-        FLEX_WRAP_NOWRAP, FLEX_WRAP_WRAP, FLEX_WRAP_WRAP_REVERSE;
-    }
-
-    private enum FlexDirection {
-        FLEX_DIRECTION_ROW, FLEX_DIRECTION_ROW_REVERSE, FLEX_DIRECTION_COLUMN, FLEX_DIRECTION_COLUMN_REVERSE;
-    }
-
-    private enum FlexAlignItems {
-        ALIGN_ITEMS_FLEX_START,
-        ALIGN_ITEMS_FLEX_END, ALIGN_ITEMS_CENTER, ALIGN_ITEMS_BASELINE, ALIGN_ITEMS_STRETCH;
-    }
-
-    private enum FlexAlignContent {
-        ALIGN_CONTENT_FLEX_START, ALIGN_CONTENT_FLEX_END, ALIGN_CONTENT_CENTER, ALIGN_CONTENT_SPACE_BETWEEN,
-        ALIGN_CONTENT_SPACE_AROUND, ALIGN_CONTENT_STRETCH;
-    }
 
 }

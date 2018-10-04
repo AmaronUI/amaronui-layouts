@@ -30,7 +30,9 @@ package com.dukescript.layouts.iosflexbox;
  * #L%
  */
 
-import com.dukescript.layouts.flexbox.FlexboxLayout;
+import com.dukescript.layouts.flexbox.FlexboxLayout.AlignContent;
+import com.dukescript.layouts.flexbox.FlexboxLayout.FlexDirection;
+import com.dukescript.layouts.flexbox.FlexboxLayout.FlexWrap;
 import java.util.concurrent.CountDownLatch;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.foundation.NSAutoreleasePool;
@@ -80,9 +82,9 @@ public final class RoboVMApplication extends UIApplicationDelegateAdapter {
         });
 
         FlexboxView flexBox = new FlexboxView(bounds);
-        flexBox.setFlexWrap(FlexboxLayout.FLEX_WRAP_WRAP);
-        flexBox.setFlexDirection(FlexboxLayout.FLEX_DIRECTION_COLUMN);
-        flexBox.setAlignContent(FlexboxLayout.ALIGN_CONTENT_SPACE_AROUND);
+        flexBox.setFlexWrap(FlexWrap.WRAP);
+        flexBox.setFlexDirection(FlexDirection.COLUMN);
+        flexBox.setAlignContent(AlignContent.SPACE_AROUND);
         for (int i = 0; i < 60; i++) {
             UILabel uiLabel = new UILabel();
             uiLabel.setText("Label " + i);

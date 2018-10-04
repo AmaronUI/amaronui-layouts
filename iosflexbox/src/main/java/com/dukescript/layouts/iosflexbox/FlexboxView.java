@@ -32,6 +32,11 @@ package com.dukescript.layouts.iosflexbox;
 
 import com.dukescript.layouts.flexbox.Bounds;
 import com.dukescript.layouts.flexbox.FlexboxLayout;
+import com.dukescript.layouts.flexbox.FlexboxLayout.AlignContent;
+import com.dukescript.layouts.flexbox.FlexboxLayout.AlignItems;
+import com.dukescript.layouts.flexbox.FlexboxLayout.FlexDirection;
+import com.dukescript.layouts.flexbox.FlexboxLayout.FlexWrap;
+import com.dukescript.layouts.flexbox.FlexboxLayout.JustifyContent;
 import java.util.logging.Logger;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.foundation.NSArray;
@@ -81,23 +86,23 @@ public class FlexboxView extends UIView {
     
     
     
-    public void setFlexDirection(int flexDirection) {
+    public void setFlexDirection(FlexDirection flexDirection) {
         flexboxLayout.setFlexDirection(flexDirection);
     }
 
-    public void setFlexWrap(int flexWrap) {
+    public void setFlexWrap(FlexWrap flexWrap) {
         flexboxLayout.setFlexWrap(flexWrap);
     }
 
-    public void setJustifyContent(int justifyContent) {
+    public void setJustifyContent(JustifyContent justifyContent) {
         flexboxLayout.setJustifyContent(justifyContent);
     }
 
-    public void setAlignItems(int alignItems) {
+    public void setAlignItems(AlignItems alignItems) {
         flexboxLayout.setAlignItems(alignItems);
     }
 
-    public void setAlignContent(int alignContent) {
+    public void setAlignContent(AlignContent alignContent) {
         flexboxLayout.setAlignContent(alignContent);
     }
 
@@ -206,7 +211,7 @@ public class FlexboxView extends UIView {
         }
 
         @Override
-        public int getFlexAlignSelf() {
+        public AlignSelf getFlexAlignSelf() {
             return params.getAlignSelf();
         }
 

@@ -29,6 +29,7 @@ package com.dukescript.layouts.flexbox;
  *  questions.
  * #L%
  */
+import com.dukescript.layouts.flexbox.FlexboxLayout.FlexItem.AlignSelf;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -40,12 +41,12 @@ import java.util.logging.Logger;
  * A reusable, platform independent implementation of the FlexBox Layout
  * Algorithm. To reuse this for your own ui toolkit implement the Container and
  * extend FlexBoxItem.
- * 
- * The implementation tries to follow the W3C spec as closely as possible. For more
- * information check here:
- * 
+ *
+ * The implementation tries to follow the W3C spec as closely as possible. For
+ * more information check here:
+ *
  * https://www.w3.org/TR/css-flexbox-1/
- * 
+ *
  *
  * @author antonepple
  */
@@ -53,65 +54,120 @@ public final class FlexboxLayout {
 
     private static Logger LOG = Logger.getLogger(FlexboxLayout.class.getName());
 
-    /** Horizontal, left to right */
-    public static final int FLEX_DIRECTION_ROW = 0;
-    /** Horizontal, right to left */
-    public static final int FLEX_DIRECTION_ROW_REVERSE = 1;
-    /** Vertical, top to bottom */
-    public static final int FLEX_DIRECTION_COLUMN = 2;
-    /** Vertical, bottom to top */
-    public static final int FLEX_DIRECTION_COLUMN_REVERSE = 3;
-    private int flexDirection;
-    /** Single line which may cause the container to overflow */
-    public static final int FLEX_WRAP_NOWRAP = 0;
-    /** multi-lines, direction defined by flexDirection */
-    public static final int FLEX_WRAP_WRAP = 1;
-    /** multi-lines, direction opposite of flexDirection */
-    public static final int FLEX_WRAP_WRAP_REVERSE = 2;
-    private int flexWrap;
-    /** items are packed toward the start line (main direction) */
-    public static final int JUSTIFY_CONTENT_FLEX_START = 0;
-    /** items are packed toward the end line (main direction)*/
-    public static final int JUSTIFY_CONTENT_FLEX_END = 1;
-    /** items are centered around center (main direction)*/
-    public static final int JUSTIFY_CONTENT_CENTER = 2;
-    /** one item at the start, one at the end, extra space is distributed between the items (main direction)*/
-    public static final int JUSTIFY_CONTENT_SPACE_BETWEEN = 3;
-    /** extra space is distributed around the items (main direction)*/
-    public static final int JUSTIFY_CONTENT_SPACE_AROUND = 4;
-    private int justifyContent;
+    public enum FlexDirection {
+        /**
+         * Horizontal, left to right
+         */
+        ROW,
+        /**
+         * Horizontal, right to left
+         */
+        ROW_REVERSE,
+        /**
+         * Vertical, top to bottom
+         */
+        COLUMN,
+        /**
+         * Vertical, bottom to top
+         */
+        COLUMN_REVERSE
+    };
 
-    /** items are packed toward the start line (cross direction) */
-    public static final int ALIGN_ITEMS_FLEX_START = 0;
-    /** items are packed toward the end line (cross direction)*/
-    public static final int ALIGN_ITEMS_FLEX_END = 1;
-    /** items are centered around center (main direction)*/
-    public static final int ALIGN_ITEMS_CENTER = 2;
-    /** Items are positioned at the baseline of the container */
-    public static final int ALIGN_ITEMS_BASELINE = 3;
-    /** stretch items to  fit the container */
-    public static final int ALIGN_ITEMS_STRETCH = 4;
-    private int alignItems;
-    
-    /** lines packed to the start of the container (cross direction)*/
-    public static final int ALIGN_CONTENT_FLEX_START = 0;
-    /** lines packed to the end of the container* (cross direction)*/
-    public static final int ALIGN_CONTENT_FLEX_END = 1;
-    /** lines packed around center (cross direction)*/
-    public static final int ALIGN_CONTENT_CENTER = 2;
-    /** one item at the start, one at the end, extra space is distributed between the items (cross direction) */
-    public static final int ALIGN_CONTENT_SPACE_BETWEEN = 3;
-    /** extra space is distributed equally around the items*/
-    public static final int ALIGN_CONTENT_SPACE_AROUND = 4;
-    /**lines are stretched in cross direction to fill container*/
-    public static final int ALIGN_CONTENT_STRETCH = 5;
-    private int alignContent;
+    public enum FlexWrap {
+        /**
+         * Single line which may cause the container to overflow
+         */
+        NOWRAP,
+        /**
+         * multi-lines, direction defined by flexDirection
+         */
+        WRAP,
+        /**
+         * multi-lines, direction opposite of flexDirection
+         */
+        WRAP_REVERSE
+    };
 
-//    public static final int SHOW_DIVIDER_NONE = 0;
-//    public static final int SHOW_DIVIDER_BEGINNING = 1;
-//    public static final int SHOW_DIVIDER_MIDDLE = 2;
-//    public static final int SHOW_DIVIDER_END = 4;
+    public enum JustifyContent {
+        /**
+         * items are packed toward the start line (main direction)
+         */
+        FLEX_START,
+        /**
+         * items are packed toward the end line (main direction)
+         */
+        FLEX_END,
+        /**
+         * items are centered around center (main direction)
+         */
+        CENTER,
+        /**
+         * one item at the start, one at the end, extra space is distributed
+         * between the items (main direction)
+         */
+        SPACE_BETWEEN,
+        /**
+         * extra space is distributed around the items (main direction)
+         */
+        SPACE_AROUND,
+    };
 
+    public enum AlignItems {
+        /**
+         * items are packed toward the start line (cross direction)
+         */
+        FLEX_START,
+        /**
+         * items are packed toward the end line (cross direction)
+         */
+        FLEX_END,
+        /**
+         * items are centered around center (main direction)
+         */
+        CENTER,
+        /**
+         * Items are positioned at the baseline of the container
+         */
+        BASELINE,
+        /**
+         * stretch items to fit the container
+         */
+        STRETCH
+    };
+
+    public enum AlignContent {
+        /**
+         * lines packed to the start of the container (cross direction)
+         */
+        FLEX_START,
+        /**
+         * lines packed to the end of the container* (cross direction)
+         */
+        FLEX_END,
+        /**
+         * lines packed around center (cross direction)
+         */
+        CENTER,
+        /**
+         * one item at the start, one at the end, extra space is distributed
+         * between the items (cross direction)
+         */
+        SPACE_BETWEEN,
+        /**
+         * extra space is distributed equally around the items
+         */
+        SPACE_AROUND,
+        /**
+         * lines are stretched in cross direction to fill container
+         */
+        STRETCH
+    };
+
+    private FlexDirection flexDirection;
+    private FlexWrap flexWrap;
+    private JustifyContent justifyContent = JustifyContent.FLEX_START;
+    private AlignItems alignItems = AlignItems.STRETCH;
+    private AlignContent alignContent;
     final List<FlexLine> flexLines = new ArrayList<>();
     private final List<FlexItem> originalItems = new ArrayList<>();
     private List<FlexItem> items;
@@ -162,7 +218,7 @@ public final class FlexboxLayout {
      * @return true if the layout is in flex direction "row"
      */
     public boolean isHorizontal() {
-        return flexDirection == FLEX_DIRECTION_ROW || flexDirection == FLEX_DIRECTION_ROW_REVERSE;
+        return flexDirection == FlexDirection.ROW || flexDirection == FlexDirection.ROW_REVERSE;
     }
 
     void sortChildren() {
@@ -175,7 +231,7 @@ public final class FlexboxLayout {
                 return ((Integer) o1.getOrder()).compareTo(o2.getOrder());
             }
         });
-        final boolean descending = flexDirection == FLEX_DIRECTION_ROW_REVERSE || flexDirection == FLEX_DIRECTION_COLUMN_REVERSE;
+        final boolean descending = flexDirection == FlexDirection.ROW_REVERSE || flexDirection == FlexDirection.COLUMN_REVERSE;
         if (descending) {
             Collections.reverse(items);
         }
@@ -196,32 +252,32 @@ public final class FlexboxLayout {
         double crossStartPos = 0;
         switch (alignContent) {
 
-            case (ALIGN_CONTENT_FLEX_START):
+            case FLEX_START:
 
                 for (FlexLine flexLine : flexLines) {
                     crossStartPos = getNewStartpossByAlignmentType(flexLine, crossStartPos);
                 }
                 minCrossSize = crossStartPos;
                 break;
-            case (ALIGN_CONTENT_FLEX_END):
+            case FLEX_END:
                 crossStartPos = Math.max(0, crossSize - minCrossSize);
                 for (FlexLine flexLine : flexLines) {
                     crossStartPos = getNewStartpossByAlignmentType(flexLine, crossStartPos);
                 }
                 break;
-            case (ALIGN_CONTENT_CENTER):
+            case CENTER:
                 crossStartPos = Math.max(0, (crossSize - minCrossSize) / 2);
                 for (FlexLine flexLine : flexLines) {
                     crossStartPos = getNewStartpossByAlignmentType(flexLine, crossStartPos);
                 }
                 break;
-            case (ALIGN_CONTENT_SPACE_BETWEEN):
+            case SPACE_BETWEEN:
                 double extra = (crossSize - minCrossSize) / (flexLines.size() - 1);
                 for (FlexLine flexLine : flexLines) {
-                    crossStartPos =getNewStartPosWithExtra(flexLine, crossStartPos, extra);
+                    crossStartPos = getNewStartPosWithExtra(flexLine, crossStartPos, extra);
                 }
                 break;
-            case (ALIGN_CONTENT_STRETCH): {
+            case STRETCH: {
                 double extraSpace = ((crossSize - minCrossSize) / flexLines.size());
                 for (FlexLine flexLine : flexLines) {
                     crossStartPos = getNewStartPosWithExtra(flexLine, crossStartPos, extraSpace);
@@ -233,7 +289,7 @@ public final class FlexboxLayout {
                 }
                 break;
             }
-            case (ALIGN_CONTENT_SPACE_AROUND):
+            case SPACE_AROUND:
                 double extraSpace = ((crossSize - minCrossSize) / flexLines.size()) / 2;
                 for (FlexLine flexLine : flexLines) {
                     crossStartPos += extraSpace;
@@ -255,7 +311,7 @@ public final class FlexboxLayout {
     }
 
     void layoutFlexLines(double mainSize) {
-        boolean horizontal = flexDirection == FLEX_DIRECTION_ROW || flexDirection == FLEX_DIRECTION_ROW_REVERSE;
+        boolean horizontal = flexDirection == FlexDirection.ROW || flexDirection == FlexDirection.ROW_REVERSE;
 
         for (FlexLine flexLine : flexLines) {
             distributeMainLineSpace(flexLine, horizontal, mainSize);
@@ -266,22 +322,22 @@ public final class FlexboxLayout {
 
     void applyAlignSelf(FlexLine line, FlexItem flexItem, boolean horizontal) {
         double lineCrossSize = line.getMinCrossSize();
-        int flexAlignSelf = flexItem.getFlexAlignSelf();
+        AlignSelf flexAlignSelf = flexItem.getFlexAlignSelf();
         switch (flexAlignSelf) {
-            case (FlexItem.ALIGN_SELF_AUTO):
+            case AUTO:
                 break; // shouldn't happen
-            case (FlexItem.ALIGN_SELF_BASELINE):
-                break; // not implemented, 
-            case (FlexItem.ALIGN_SELF_CENTER):
+            case BASELINE:
+                break; // TODO: not implemented, 
+            case CENTER:
                 flexItem.setCrossStartPos(flexItem.getCrossMarginStart(horizontal) + (lineCrossSize - flexItem.getCrossTargetSize()) / 2);
                 break;
-            case (FlexItem.ALIGN_SELF_FLEX_START):
+            case FLEX_START:
                 flexItem.setCrossStartPos(flexItem.getCrossMarginStart(horizontal));
                 break;
-            case (FlexItem.ALIGN_SELF_FLEX_END):
+            case FLEX_END:
                 flexItem.setCrossStartPos(flexItem.getCrossMarginStart(horizontal) + lineCrossSize - flexItem.getCrossTargetSize());
                 break;
-            case (FlexItem.ALIGN_SELF_STRETCH):
+            case STRETCH:
                 flexItem.setCrossStartPos(flexItem.getCrossMarginStart(horizontal));
                 flexItem.setCrossTargetSize(lineCrossSize - flexItem.getCrossMarginStart(horizontal) - flexItem.getCrossMarginEnd(horizontal));
                 break;
@@ -293,17 +349,17 @@ public final class FlexboxLayout {
         double lineCrossSize = line.minCrossSize;
 
         switch (alignItems) {
-            case (FlexboxLayout.ALIGN_ITEMS_FLEX_START):
+            case FLEX_START:
                 for (FlexItem flexItem : flexItems) {
                     applyCrossStartPostOnItem(flexItem, line, horizontal, flexItem.getCrossMarginStart(horizontal));
                 }
                 break;
-            case (FlexboxLayout.ALIGN_ITEMS_FLEX_END):
+            case FLEX_END:
                 for (FlexItem flexItem : flexItems) {
                     applyCrossStartPostOnItem(flexItem, line, horizontal, flexItem.getCrossMarginStart(horizontal) + lineCrossSize - flexItem.getCrossTargetSize());
                 }
                 break;
-            case (FlexboxLayout.ALIGN_ITEMS_STRETCH):
+            case STRETCH:
                 for (FlexItem flexItem : flexItems) {
                     if (flexItem.isSelfAligned()) {
                         applyAlignSelf(line, flexItem, horizontal);
@@ -313,13 +369,13 @@ public final class FlexboxLayout {
                     }
                 }
                 break;
-            case (FlexboxLayout.ALIGN_ITEMS_CENTER):
+            case CENTER:
                 for (FlexItem flexItem : flexItems) {
                     applyCrossStartPostOnItem(flexItem, line, horizontal, flexItem.getCrossMarginStart(horizontal) + (lineCrossSize - flexItem.getCrossTargetSize()) / 2);
                 }
                 break;
-            case (FlexboxLayout.ALIGN_ITEMS_BASELINE):
-                // TODO  find a way to calc baseline
+            case BASELINE:
+                // TODO:  find a way to calc baseline
                 for (FlexItem flexItem : flexItems) {
                     applyCrossStartPostOnItem(flexItem, line, horizontal, flexItem.getCrossMarginStart(horizontal) + (lineCrossSize - flexItem.getCrossTargetSize()) / 2);
                 }
@@ -341,24 +397,24 @@ public final class FlexboxLayout {
         double rest = mainSize - line.minMainSize;
         double startMain = 0;
         switch (justifyContent) {
-            case (FlexboxLayout.JUSTIFY_CONTENT_FLEX_START):
+            case FLEX_START:
                 for (FlexItem flexItem : flexItems) {
                     startMain = getNewStartMain(flexItem, horizontal, startMain);
                 }
                 break;
-            case (FlexboxLayout.JUSTIFY_CONTENT_FLEX_END):
+            case FLEX_END:
                 startMain = Math.max(0, rest);
                 for (FlexItem flexItem : flexItems) {
                     startMain = getNewStartMain(flexItem, horizontal, startMain);
                 }
                 break;
-            case (FlexboxLayout.JUSTIFY_CONTENT_CENTER):
+            case CENTER:
                 startMain = Math.max(rest / 2, 0);
                 for (FlexItem flexItem : flexItems) {
                     startMain = getNewStartMain(flexItem, horizontal, startMain);
                 }
                 break;
-            case (FlexboxLayout.JUSTIFY_CONTENT_SPACE_AROUND):
+            case SPACE_AROUND:
                 double extraSpacePerItem = Math.max((rest / line.flexItems.size()) / 2, 0);
 
                 for (FlexItem flexItem : flexItems) {
@@ -366,7 +422,7 @@ public final class FlexboxLayout {
                     startMain = getNewStartMainWithExtraSpace(flexItem, horizontal, startMain, extraSpacePerItem);
                 }
                 break;
-            case (FlexboxLayout.JUSTIFY_CONTENT_SPACE_BETWEEN):
+            case SPACE_BETWEEN:
                 if (line.flexItems.size() == 1) {
                     break;
                 }
@@ -383,7 +439,7 @@ public final class FlexboxLayout {
         flexItem.setMainStartPos(flexItem.getMainMarginStart(horizontal) + startMain);
         return startMain += flexItem.getMainTargetSize();
     }
-    
+
     private double getNewStartMainWithExtraSpace(FlexItem flexItem, boolean horizontal, double startMain, double extraSpacePerItem) {
         flexItem.setMainStartPos(flexItem.getMainMarginStart(horizontal) + startMain);
         return startMain += extraSpacePerItem + flexItem.getMainTargetSize();
@@ -480,12 +536,12 @@ public final class FlexboxLayout {
 
     void calculateFlexLines(double mainSize) {
         LOG.finest("calculateFlexLines");
-        boolean horizontal = flexDirection == FLEX_DIRECTION_ROW || flexDirection == FLEX_DIRECTION_ROW_REVERSE;
+        boolean horizontal = flexDirection == FlexDirection.ROW || flexDirection == FlexDirection.ROW_REVERSE;
         minMainSize = 0;
         flexLines.clear();
         FlexLine line = new FlexLine();
         flexLines.add(line);
-        if (flexWrap == FLEX_WRAP_NOWRAP) {
+        if (flexWrap == FlexWrap.NOWRAP) {
             LOG.finest("flex-wrap is FLEX_WRAP_NOWRAP");
             line.flexItems.addAll(items);
             for (FlexItem item : items) {
@@ -540,7 +596,7 @@ public final class FlexboxLayout {
                 line.setShrink(line.getShrink() + item.getFlexShrink());
             }
         }
-        if (flexWrap == FLEX_WRAP_WRAP_REVERSE) {
+        if (flexWrap == FlexWrap.WRAP_REVERSE) {
             Collections.reverse(flexLines);
         }
     }
@@ -550,70 +606,76 @@ public final class FlexboxLayout {
      *
      * @return flexDirection
      */
-    public int getFlexDirection() {
+    public FlexDirection getFlexDirection() {
         return flexDirection;
     }
 
     /**
      * setter for flexDirection, which specifies the direction of the flexitems.
-     * 
+     *
      * @param flexDirection
      */
-    public void setFlexDirection(int flexDirection) {
+    public void setFlexDirection(FlexDirection flexDirection) {
         this.flexDirection = flexDirection;
     }
 
     /**
-     * Getter for flexWrap. flexWrap specifies if and how the flex items should be wrapped.
-     * @return 
+     * Getter for flexWrap. flexWrap specifies if and how the flex items should
+     * be wrapped.
+     *
+     * @return
      */
-    public int getFlexWrap() {
+    public FlexWrap getFlexWrap() {
         return flexWrap;
     }
 
     /**
-     * Setter for flexWrap. flexWrap specifies if and how the flex items should be wrapped.
-     * @param flexWrap 
+     * Setter for flexWrap. flexWrap specifies if and how the flex items should
+     * be wrapped.
+     *
+     * @param flexWrap
      */
-    public void setFlexWrap(int flexWrap) {
+    public void setFlexWrap(FlexWrap flexWrap) {
         this.flexWrap = flexWrap;
     }
 
     /**
-     * Getter for justifyContent. The justifyContent Property defines the 
+     * Getter for justifyContent. The justifyContent Property defines the
      * alignment along the main axis and the distribution of extra space.
+     *
      * @return justifyContent
      */
-    public int getJustifyContent() {
+    public JustifyContent getJustifyContent() {
         return justifyContent;
     }
 
     /**
-     * Setter for justifyContent. The justifyContent Property defines the 
+     * Setter for justifyContent. The justifyContent Property defines the
      * alignment along the main axis and the distribution of extra space.
+     *
      * @param justifyContent
      */
-    public void setJustifyContent(int justifyContent) {
+    public void setJustifyContent(JustifyContent justifyContent) {
         this.justifyContent = justifyContent;
     }
 
     /**
-     * Getter for alignItems. It specifies the default alignment for items inside the flexible
-     * container.
+     * Getter for alignItems. It specifies the default alignment for items
+     * inside the flexible container.
      *
      * @return alignItems;
      */
-    public int getAlignItems() {
+    public AlignItems getAlignItems() {
         return alignItems;
     }
 
     /**
-     * Setter for alignItems.alignItems specifies the default alignment for items inside the flexible
-     * container.
+     * Setter for alignItems.alignItems specifies the default alignment for
+     * items inside the flexible container.
      *
      * @param alignItems
      */
-    public void setAlignItems(int alignItems) {
+    public void setAlignItems(AlignItems alignItems) {
         this.alignItems = alignItems;
     }
 
@@ -624,7 +686,7 @@ public final class FlexboxLayout {
      *
      * @return alignContent
      */
-    public int getAlignContent() {
+    public AlignContent getAlignContent() {
         return alignContent;
     }
 
@@ -635,7 +697,7 @@ public final class FlexboxLayout {
      *
      * @param alignContent
      */
-    public void setAlignContent(int alignContent) {
+    public void setAlignContent(AlignContent alignContent) {
         this.alignContent = alignContent;
     }
 
@@ -656,7 +718,7 @@ public final class FlexboxLayout {
     }
 
     private void applyLayout() {
-        boolean horizontal = flexDirection == FLEX_DIRECTION_ROW || flexDirection == FLEX_DIRECTION_ROW_REVERSE;
+        boolean horizontal = flexDirection == FlexDirection.ROW || flexDirection == FlexDirection.ROW_REVERSE;
         double crossStartPos = 0;
         for (FlexLine flexLine : flexLines) {
             crossStartPos = flexLine.crossStartPos;
@@ -680,6 +742,7 @@ public final class FlexboxLayout {
             item.setCrossTargetSize(-1);
             item.setMainStartPos(-1);
             item.setMainTargetSize(-1);
+
         }
     }
 
@@ -774,7 +837,7 @@ public final class FlexboxLayout {
             private float flexGrow = FlexboxLayout.FlexItemBase.FLEX_GROW_DEFAULT;
             private float flexShrink = FlexboxLayout.FlexItemBase.FLEX_SHRINK_DEFAULT;
             private float flexBasisPercent = FlexboxLayout.FlexItemBase.FLEX_BASIS_PERCENT_DEFAULT;
-            private int flexAlignSelf = FlexboxLayout.FlexItemBase.FLEX_ALIGN_SELF_DEFAULT;
+            private AlignSelf flexAlignSelf = FlexboxLayout.FlexItemBase.FLEX_ALIGN_SELF_DEFAULT;
             private int order = 0;
 
             private Builder() {
@@ -840,7 +903,7 @@ public final class FlexboxLayout {
                 return this;
             }
 
-            public Builder flexAlignSelf(final int value) {
+            public Builder flexAlignSelf(final AlignSelf value) {
                 this.flexAlignSelf = value;
                 return this;
             }
@@ -869,7 +932,7 @@ public final class FlexboxLayout {
             return new DefaultFlexItem.Builder();
         }
 
-        private DefaultFlexItem(final boolean wrapBefore, final double width, final double height, final double minWidth, final double minHeight, final double maxWidth, final double maxHeight, final double marginLeft, final double marginTop, final double marginRight, final double marginBottom, final float flexGrow, final float flexShrink, final float flexBasisPercent, final int order, final int alignSelf) {
+        private DefaultFlexItem(final boolean wrapBefore, final double width, final double height, final double minWidth, final double minHeight, final double maxWidth, final double maxHeight, final double marginLeft, final double marginTop, final double marginRight, final double marginBottom, final float flexGrow, final float flexShrink, final float flexBasisPercent, final int order, final AlignSelf alignSelf) {
             super.setWrapBefore(wrapBefore);
             this.width = width;
             this.height = height;
@@ -983,16 +1046,20 @@ public final class FlexboxLayout {
 
     public static abstract class FlexItem {
 
-        public static final int ALIGN_SELF_FLEX_START = FlexboxLayout.ALIGN_ITEMS_FLEX_START;
-        public static final int ALIGN_SELF_FLEX_END = FlexboxLayout.ALIGN_ITEMS_FLEX_END;
-        static final int ALIGN_SELF_CENTER = FlexboxLayout.ALIGN_ITEMS_CENTER;
-        public static final int ALIGN_SELF_BASELINE = FlexboxLayout.ALIGN_ITEMS_BASELINE;
-        public static final int ALIGN_SELF_STRETCH = FlexboxLayout.ALIGN_ITEMS_STRETCH;
-        public static final int ALIGN_SELF_AUTO = 5;
+        public enum AlignSelf {
+            FLEX_START,
+            FLEX_END,
+            CENTER,
+            BASELINE,
+            STRETCH,
+            AUTO
+        }
+        
+       
         public static final float FLEX_GROW_DEFAULT = 0;
         public static final float FLEX_SHRINK_DEFAULT = 1;
         public static final int FLEX_BASIS_PERCENT_DEFAULT = -1;
-        public static final int FLEX_ALIGN_SELF_DEFAULT = ALIGN_SELF_AUTO;
+        public static final AlignSelf FLEX_ALIGN_SELF_DEFAULT = AlignSelf.AUTO;
 
         Bounds bounds;
         protected double mainTargetSize = 0;
@@ -1019,7 +1086,7 @@ public final class FlexboxLayout {
         }
 
         public boolean isSelfAligned() {
-            return getFlexAlignSelf() != ALIGN_SELF_AUTO;
+            return getFlexAlignSelf() != AlignSelf.AUTO;
         }
 
         /**
@@ -1061,7 +1128,7 @@ public final class FlexboxLayout {
 
         public abstract float getFlexBasisPercent();
 
-        public abstract int getFlexAlignSelf();
+        public abstract AlignSelf getFlexAlignSelf();
 
         public abstract int getOrder();
 
@@ -1139,7 +1206,7 @@ public final class FlexboxLayout {
         float flexGrow = FLEX_GROW_DEFAULT;
         float flexShrink = FLEX_SHRINK_DEFAULT;
         float flexBasisPercent = FLEX_BASIS_PERCENT_DEFAULT;
-        int flexAlignSelf = FLEX_ALIGN_SELF_DEFAULT;
+        AlignSelf flexAlignSelf = FLEX_ALIGN_SELF_DEFAULT;
         int order;
 
         public FlexItemBase() {
@@ -1156,11 +1223,11 @@ public final class FlexboxLayout {
         }
 
         @Override
-        public int getFlexAlignSelf() {
+        public AlignSelf getFlexAlignSelf() {
             return this.flexAlignSelf;
         }
 
-        public final void setFlexAlignSelf(int alignSelf) {
+        public final void setFlexAlignSelf(AlignSelf alignSelf) {
             this.flexAlignSelf = alignSelf;
         }
 
