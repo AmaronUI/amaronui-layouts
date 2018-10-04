@@ -7,7 +7,7 @@ The FlexBoxPane is available from Maven Central:
     <dependency>
       <groupId>com.dukescript.amaronui.layouts</groupId>
       <artifactId>jfxflexbox</artifactId>
-      <version>0.1</version>
+      <version>0.2</version>
     </dependency>
 
 FlexBoxPane is based on [this Java implementation of Flexbox](https://github.com/AmaronUI/amaronui-layouts/tree/master/flexbox).
@@ -16,8 +16,8 @@ You can use it like any other JavaFX Layout Pane:
 ```java
         FlexBoxPane flex = new FlexBoxPane();
         
-        flex.setAlignContent(FlexboxLayout.ALIGN_CONTENT_SPACE_AROUND);
-        flex.setFlexDirection(FlexboxLayout.FLEX_DIRECTION_ROW);
+        flex.setAlignContent(AlignContent.SPACE_AROUND);
+        flex.setFlexDirection(FlexDirection.ROW);
         for (int i = 0; i < 5; i++) {
             Label l = new Label("Flex Item " + i);
             l.setPrefHeight(50 + (i * 5));
@@ -32,5 +32,17 @@ You can use it like any other JavaFX Layout Pane:
             flex.getChildren().add(l);
         }
 ```
+
+## Release Info
+
+### Version 0.2 (04.10.2018)
+
+Incompatible change: Replaced int constants with Enums in FlexBoxLayout and FlexItem
+
+initial release
+
+### Version 0.1 (22.09.2018)
+
+initial release
 
 
