@@ -39,8 +39,6 @@ You can use it like any other JavaFX Layout Pane:
 
 Incompatible change: Replaced int constants with Enums in FlexBoxLayout and FlexItem
 
-initial release
-
 ### Version 0.1 (22.09.2018)
 
 initial release
