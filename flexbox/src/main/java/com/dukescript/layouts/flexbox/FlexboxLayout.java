@@ -683,7 +683,7 @@ public final class FlexboxLayout {
         }
     }
 
-    public static class FlexLine {
+    static class FlexLine {
 
         private List<FlexItem> flexItems = new ArrayList<>();
         private double minMainSize = 0, minCrossSize = 0;
