@@ -199,37 +199,32 @@ public final class FlexboxLayout {
             case (ALIGN_CONTENT_FLEX_START):
 
                 for (FlexLine flexLine : flexLines) {
-                    flexLine.crossStartPos = crossStartPos;
-                    crossStartPos += flexLine.minCrossSize;
+                    crossStartPos = getNewStartpossByAlignmentType(flexLine, crossStartPos);
                 }
                 minCrossSize = crossStartPos;
                 break;
             case (ALIGN_CONTENT_FLEX_END):
                 crossStartPos = Math.max(0, crossSize - minCrossSize);
                 for (FlexLine flexLine : flexLines) {
-                    flexLine.crossStartPos = crossStartPos;
-                    crossStartPos += flexLine.minCrossSize;
+                    crossStartPos = getNewStartpossByAlignmentType(flexLine, crossStartPos);
                 }
                 break;
             case (ALIGN_CONTENT_CENTER):
                 crossStartPos = Math.max(0, (crossSize - minCrossSize) / 2);
                 for (FlexLine flexLine : flexLines) {
-                    flexLine.crossStartPos = crossStartPos;
-                    crossStartPos += flexLine.minCrossSize;
+                    crossStartPos = getNewStartpossByAlignmentType(flexLine, crossStartPos);
                 }
                 break;
             case (ALIGN_CONTENT_SPACE_BETWEEN):
                 double extra = (crossSize - minCrossSize) / (flexLines.size() - 1);
                 for (FlexLine flexLine : flexLines) {
-                    flexLine.crossStartPos = crossStartPos;
-                    crossStartPos += flexLine.minCrossSize + extra;
+                    crossStartPos =getNewStartPosWithExtra(flexLine, crossStartPos, extra);
                 }
                 break;
             case (ALIGN_CONTENT_STRETCH): {
                 double extraSpace = ((crossSize - minCrossSize) / flexLines.size());
                 for (FlexLine flexLine : flexLines) {
-                    flexLine.crossStartPos = crossStartPos;
-                    crossStartPos += flexLine.minCrossSize + extraSpace;
+                    crossStartPos = getNewStartPosWithExtra(flexLine, crossStartPos, extraSpace);
 //                    List<FlexItem> flexItems = flexLine.getFlexItems();
 //                    for (FlexItem flexItem : flexItems) {
 //                        flexItem.setCrossTargetSize(flexLine.minCrossSize + extraSpace);
@@ -242,11 +237,21 @@ public final class FlexboxLayout {
                 double extraSpace = ((crossSize - minCrossSize) / flexLines.size()) / 2;
                 for (FlexLine flexLine : flexLines) {
                     crossStartPos += extraSpace;
-                    flexLine.crossStartPos = crossStartPos;
-                    crossStartPos += flexLine.minCrossSize + extraSpace;
+                    crossStartPos = getNewStartPosWithExtra(flexLine, crossStartPos, extraSpace);
                 }
                 break;
         }
+    }
+
+    private double getNewStartPosWithExtra(FlexLine flexLine, double crossStartPos, double extra) {
+        flexLine.crossStartPos = crossStartPos;
+        return crossStartPos += flexLine.minCrossSize + extra;
+    }
+
+    private double getNewStartpossByAlignmentType(FlexLine flexLine, double crossStartPos) {
+        flexLine.crossStartPos = crossStartPos;
+        crossStartPos += flexLine.minCrossSize;
+        return crossStartPos;
     }
 
     void layoutFlexLines(double mainSize) {
@@ -290,20 +295,12 @@ public final class FlexboxLayout {
         switch (alignItems) {
             case (FlexboxLayout.ALIGN_ITEMS_FLEX_START):
                 for (FlexItem flexItem : flexItems) {
-                    if (flexItem.isSelfAligned()) {
-                        applyAlignSelf(line, flexItem, horizontal);
-                    } else {
-                        flexItem.setCrossStartPos(flexItem.getCrossMarginStart(horizontal));
-                    }
+                    applyCrossStartPostOnItem(flexItem, line, horizontal, flexItem.getCrossMarginStart(horizontal));
                 }
                 break;
             case (FlexboxLayout.ALIGN_ITEMS_FLEX_END):
                 for (FlexItem flexItem : flexItems) {
-                    if (flexItem.isSelfAligned()) {
-                        applyAlignSelf(line, flexItem, horizontal);
-                    } else {
-                        flexItem.setCrossStartPos(flexItem.getCrossMarginStart(horizontal) + lineCrossSize - flexItem.getCrossTargetSize());
-                    }
+                    applyCrossStartPostOnItem(flexItem, line, horizontal, flexItem.getCrossMarginStart(horizontal) + lineCrossSize - flexItem.getCrossTargetSize());
                 }
                 break;
             case (FlexboxLayout.ALIGN_ITEMS_STRETCH):
@@ -318,23 +315,23 @@ public final class FlexboxLayout {
                 break;
             case (FlexboxLayout.ALIGN_ITEMS_CENTER):
                 for (FlexItem flexItem : flexItems) {
-                    if (flexItem.isSelfAligned()) {
-                        applyAlignSelf(line, flexItem, horizontal);
-                    } else {
-                        flexItem.setCrossStartPos(flexItem.getCrossMarginStart(horizontal) + (lineCrossSize - flexItem.getCrossTargetSize()) / 2);
-                    }
+                    applyCrossStartPostOnItem(flexItem, line, horizontal, flexItem.getCrossMarginStart(horizontal) + (lineCrossSize - flexItem.getCrossTargetSize()) / 2);
                 }
                 break;
             case (FlexboxLayout.ALIGN_ITEMS_BASELINE):
                 // TODO  find a way to calc baseline
                 for (FlexItem flexItem : flexItems) {
-                    if (flexItem.isSelfAligned()) {
-                        applyAlignSelf(line, flexItem, horizontal);
-                    } else {
-                        flexItem.setCrossStartPos(flexItem.getCrossMarginStart(horizontal) + (lineCrossSize - flexItem.getCrossTargetSize()) / 2);
-                    }
+                    applyCrossStartPostOnItem(flexItem, line, horizontal, flexItem.getCrossMarginStart(horizontal) + (lineCrossSize - flexItem.getCrossTargetSize()) / 2);
                 }
                 break;
+        }
+    }
+
+    private void applyCrossStartPostOnItem(FlexItem flexItem, FlexLine line, boolean horizontal, double startPos) {
+        if (flexItem.isSelfAligned()) {
+            applyAlignSelf(line, flexItem, horizontal);
+        } else {
+            flexItem.setCrossStartPos(startPos);
         }
     }
 
@@ -346,22 +343,19 @@ public final class FlexboxLayout {
         switch (justifyContent) {
             case (FlexboxLayout.JUSTIFY_CONTENT_FLEX_START):
                 for (FlexItem flexItem : flexItems) {
-                    flexItem.setMainStartPos(flexItem.getMainMarginStart(horizontal) + startMain);
-                    startMain += flexItem.getMainTargetSize();
+                    startMain = getNewStartMain(flexItem, horizontal, startMain);
                 }
                 break;
             case (FlexboxLayout.JUSTIFY_CONTENT_FLEX_END):
                 startMain = Math.max(0, rest);
                 for (FlexItem flexItem : flexItems) {
-                    flexItem.setMainStartPos(flexItem.getMainMarginStart(horizontal) + startMain);
-                    startMain += flexItem.getMainTargetSize();
+                    startMain = getNewStartMain(flexItem, horizontal, startMain);
                 }
                 break;
             case (FlexboxLayout.JUSTIFY_CONTENT_CENTER):
                 startMain = Math.max(rest / 2, 0);
                 for (FlexItem flexItem : flexItems) {
-                    flexItem.setMainStartPos(flexItem.getMainMarginStart(horizontal) + startMain);
-                    startMain += flexItem.getMainTargetSize();
+                    startMain = getNewStartMain(flexItem, horizontal, startMain);
                 }
                 break;
             case (FlexboxLayout.JUSTIFY_CONTENT_SPACE_AROUND):
@@ -369,8 +363,7 @@ public final class FlexboxLayout {
 
                 for (FlexItem flexItem : flexItems) {
                     startMain += extraSpacePerItem;
-                    flexItem.setMainStartPos(flexItem.getMainMarginStart(horizontal) + startMain);
-                    startMain += extraSpacePerItem + flexItem.getMainTargetSize();
+                    startMain = getNewStartMainWithExtraSpace(flexItem, horizontal, startMain, extraSpacePerItem);
                 }
                 break;
             case (FlexboxLayout.JUSTIFY_CONTENT_SPACE_BETWEEN):
@@ -379,17 +372,27 @@ public final class FlexboxLayout {
                 }
                 double extraSpacebetweenItems = Math.max(0, rest / (line.flexItems.size() - 1));
                 for (FlexItem flexItem : flexItems) {
-                    flexItem.setMainStartPos(flexItem.getMainMarginStart(horizontal) + startMain);
-                    startMain += extraSpacebetweenItems + flexItem.getMainTargetSize();
+                    startMain = getNewStartMainWithExtraSpace(flexItem, horizontal, startMain, extraSpacebetweenItems);
                 }
                 break;
         }
 
     }
 
+    private double getNewStartMain(FlexItem flexItem, boolean horizontal, double startMain) {
+        flexItem.setMainStartPos(flexItem.getMainMarginStart(horizontal) + startMain);
+        return startMain += flexItem.getMainTargetSize();
+    }
+    
+    private double getNewStartMainWithExtraSpace(FlexItem flexItem, boolean horizontal, double startMain, double extraSpacePerItem) {
+        flexItem.setMainStartPos(flexItem.getMainMarginStart(horizontal) + startMain);
+        return startMain += extraSpacePerItem + flexItem.getMainTargetSize();
+    }
+
     void distributeMainLineSpace(FlexLine line, boolean horizontal, double mainSize) {
         List<FlexItem> flexItems = line.flexItems;
         double freeSpace = mainSize - line.minMainSize;
+        // hier geht noch was das ist extrem Ã¤hnlich!
         if (freeSpace > 0) {
             double growUnit = 0;
             if (line.getGrow() > 0) {
