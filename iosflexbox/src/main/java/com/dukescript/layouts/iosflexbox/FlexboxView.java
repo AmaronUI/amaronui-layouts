@@ -82,9 +82,6 @@ public class FlexboxView extends UIView {
 
         
     }
-
-    
-    
     
     public void setFlexDirection(FlexDirection flexDirection) {
         flexboxLayout.setFlexDirection(flexDirection);
@@ -217,8 +214,6 @@ public class FlexboxView extends UIView {
 
         @Override
         protected void adjustBounds(Bounds bounds) {
-            
-    
             delegate.setFrame(new CGRect(bounds.getX(), bounds.getY(), bounds.getW(), bounds.getH()));
             delegate.setBounds(new CGRect(0, 0, bounds.getW(), bounds.getH()));
         }

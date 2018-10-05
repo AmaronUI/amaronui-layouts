@@ -52,7 +52,7 @@ import java.util.logging.Logger;
  */
 public final class FlexboxLayout {
 
-    private static Logger LOG = Logger.getLogger(FlexboxLayout.class.getName());
+    private static final Logger LOG = Logger.getLogger(FlexboxLayout.class.getName());
 
     public enum FlexDirection {
         /**
@@ -172,7 +172,8 @@ public final class FlexboxLayout {
     private final List<FlexItem> originalItems = new ArrayList<>();
     private List<FlexItem> items;
     private double minMainSize = Double.MIN_VALUE;
-
+    private double minCrossSize = Double.MIN_VALUE;
+    
     /**
      * Gets the minimum main size. The main size is the width or height of a
      * flex container or flex item, whichever is in the main dimension, is that
@@ -194,8 +195,7 @@ public final class FlexboxLayout {
     public double getMinCrossSize() {
         return minCrossSize;
     }
-    private double minCrossSize = Double.MIN_VALUE;
-
+    
     /**
      * Call this to do the actual layout when you implement a layout container.
      *
@@ -253,7 +253,6 @@ public final class FlexboxLayout {
         switch (alignContent) {
 
             case FLEX_START:
-
                 for (FlexLine flexLine : flexLines) {
                     crossStartPos = getNewStartpossByAlignmentType(flexLine, crossStartPos);
                 }
@@ -398,21 +397,15 @@ public final class FlexboxLayout {
         double startMain = 0;
         switch (justifyContent) {
             case FLEX_START:
-                for (FlexItem flexItem : flexItems) {
-                    startMain = getNewStartMain(flexItem, horizontal, startMain);
-                }
+                loopFlexItemsForStartMain(flexItems, startMain, horizontal);
                 break;
             case FLEX_END:
                 startMain = Math.max(0, rest);
-                for (FlexItem flexItem : flexItems) {
-                    startMain = getNewStartMain(flexItem, horizontal, startMain);
-                }
+                loopFlexItemsForStartMain(flexItems, startMain, horizontal);
                 break;
             case CENTER:
                 startMain = Math.max(rest / 2, 0);
-                for (FlexItem flexItem : flexItems) {
-                    startMain = getNewStartMain(flexItem, horizontal, startMain);
-                }
+                loopFlexItemsForStartMain(flexItems, startMain, horizontal);
                 break;
             case SPACE_AROUND:
                 double extraSpacePerItem = Math.max((rest / line.flexItems.size()) / 2, 0);
@@ -435,6 +428,12 @@ public final class FlexboxLayout {
 
     }
 
+    private void loopFlexItemsForStartMain(List<FlexItem> flexItems, double startMain, boolean horizontal) {
+        for (FlexItem flexItem : flexItems) {
+            startMain = getNewStartMain(flexItem, horizontal, startMain);
+        }
+    }
+
     private double getNewStartMain(FlexItem flexItem, boolean horizontal, double startMain) {
         flexItem.setMainStartPos(flexItem.getMainMarginStart(horizontal) + startMain);
         return startMain += flexItem.getMainTargetSize();
@@ -448,9 +447,8 @@ public final class FlexboxLayout {
     void distributeMainLineSpace(FlexLine line, boolean horizontal, double mainSize) {
         List<FlexItem> flexItems = line.flexItems;
         double freeSpace = mainSize - line.minMainSize;
-        // hier geht noch was das ist extrem Ã¤hnlich!
+        double growUnit = 0;
         if (freeSpace > 0) {
-            double growUnit = 0;
             if (line.getGrow() > 0) {
                 HashSet<FlexItem> frozen = new HashSet<>();
                 float totalGrow = line.getGrow();
@@ -458,13 +456,10 @@ public final class FlexboxLayout {
                 while (totalGrow > 0 && growUnit > 0) { // while we have space left
                     double rest = 0;
                     for (FlexItem flexItem : flexItems) {
-                        if (frozen.contains(flexItem)) {
+                        if (checkSkipItem(frozen, flexItem, flexItem.getFlexGrow(), 0f)) {
                             continue;
                         }
-                        if (flexItem.getFlexGrow() == 0) {
-                            frozen.add(flexItem);
-                            continue;
-                        }
+
                         double grow = flexItem.getFlexGrow() * growUnit;
                         double grownSize = grow + flexItem.getMainTargetSize();
                         double clampedSize = horizontal ? flexItem.getMaxWidth() : flexItem.getMaxHeight();
@@ -476,22 +471,17 @@ public final class FlexboxLayout {
                             totalGrow -= flexItem.getFlexGrow(); // rest is split up between the others
                         }
                         double distributed = grownSize - flexItem.getMainTargetSize();
-                        line.minMainSize += distributed;
                         flexItem.setMainTargetSize(grownSize);
+                        line.minMainSize += distributed;
                     }
-                    if (rest > 0) { // there's extra space to distribute
-                        if (totalGrow <= 0) { // nobody is interested
-                            growUnit = 0;
-                        } else { // calculate distribution factor for next round
-                            growUnit = rest / totalGrow;
-                        }
+                    if (rest > 0) {
+                        growUnit = getNewGrowUnit(totalGrow, rest);
                     } else {
                         break;
                     }
                 }
             }
         } else if (freeSpace < 0) {
-            double growUnit = 0;
             if (line.getShrink() > 0) {
                 HashSet<FlexItem> frozen = new HashSet<>();
                 float totalGrow = line.getShrink();
@@ -499,13 +489,10 @@ public final class FlexboxLayout {
                 while (totalGrow > 0 && growUnit < 0) { // while we have space left
                     double rest = 0;
                     for (FlexItem flexItem : flexItems) {
-                        if (frozen.contains(flexItem)) {
+                        if (checkSkipItem(frozen, flexItem, totalGrow, 1f)) {
                             continue;
                         }
-                        if (flexItem.getFlexShrink() == 1f) {
-                            frozen.add(flexItem);
-                            continue;
-                        }
+
                         double grow = flexItem.getFlexShrink() * growUnit;
                         double grownSize = grow + flexItem.getMainTargetSize();
                         double clampedSize = horizontal ? flexItem.getMinWidth() : flexItem.getMinHeight();
@@ -517,21 +504,39 @@ public final class FlexboxLayout {
                             totalGrow -= flexItem.getFlexShrink(); // rest is split up between the others
                         }
                         double distributed = grownSize - flexItem.getMainTargetSize();
-                        line.minMainSize += distributed;
                         flexItem.setMainTargetSize(grownSize);
+                        line.minMainSize += distributed;
                     }
                     if (rest > 0) { // there's extra space to distribute
-                        if (totalGrow <= 0) { // nobody is interested
-                            growUnit = 0;
-                        } else { // calculate distribution factor for next round
-                            growUnit = rest / totalGrow;
-                        }
+                        growUnit = getNewGrowUnit(totalGrow, rest);
                     } else {
                         break;
                     }
                 }
             }
         }
+    }
+
+    private double getNewGrowUnit(float totalGrow, double rest) {
+        double growUnit;
+        // there's extra space to distribute
+        if (totalGrow <= 0) { // nobody is interested
+            growUnit = 0;
+        } else { // calculate distribution factor for next round
+            growUnit = rest / totalGrow;
+        }
+        return growUnit;
+    }
+
+    private boolean checkSkipItem(HashSet<FlexItem> frozen, FlexItem flexItem, float valueToCheck, float valueToCheckAgainst) {
+        if (frozen.contains(flexItem)) {
+            return true;
+        }
+        if (valueToCheck == valueToCheckAgainst) {
+            frozen.add(flexItem);
+            return true;
+        }
+        return false;
     }
 
     void calculateFlexLines(double mainSize) {
@@ -821,7 +826,7 @@ public final class FlexboxLayout {
         public DefaultFlexItem() {
         }
 
-        public static class Builder {
+        public static class DefaultFlexItemBuilder {
 
             private boolean wrapBefore = false;
             private double width = -1;
@@ -840,85 +845,85 @@ public final class FlexboxLayout {
             private AlignSelf flexAlignSelf = FlexboxLayout.FlexItemBase.FLEX_ALIGN_SELF_DEFAULT;
             private int order = 0;
 
-            private Builder() {
+            private DefaultFlexItemBuilder() {
             }
 
-            public Builder wrapBefore(final boolean value) {
+            public DefaultFlexItemBuilder wrapBefore(final boolean value) {
                 this.wrapBefore = value;
                 return this;
             }
 
-            public Builder width(final double value) {
+            public DefaultFlexItemBuilder width(final double value) {
                 this.width = value;
                 return this;
             }
 
-            public Builder height(final double value) {
+            public DefaultFlexItemBuilder height(final double value) {
                 this.height = value;
                 return this;
             }
 
-            public Builder minWidth(final double value) {
+            public DefaultFlexItemBuilder minWidth(final double value) {
                 this.minWidth = value;
                 return this;
             }
 
-            public Builder minHeight(final double value) {
+            public DefaultFlexItemBuilder minHeight(final double value) {
                 this.minHeight = value;
                 return this;
             }
 
-            public Builder maxWidth(final double value) {
+            public DefaultFlexItemBuilder maxWidth(final double value) {
                 this.maxWidth = value;
                 return this;
             }
 
-            public Builder maxHeight(final double value) {
+            public DefaultFlexItemBuilder maxHeight(final double value) {
                 this.maxHeight = value;
                 return this;
             }
 
-            public Builder marginLeft(final double value) {
+            public DefaultFlexItemBuilder marginLeft(final double value) {
                 this.marginLeft = value;
                 return this;
             }
 
-            public Builder marginTop(final double value) {
+            public DefaultFlexItemBuilder marginTop(final double value) {
                 this.marginTop = value;
                 return this;
             }
 
-            public Builder marginRight(final double value) {
+            public DefaultFlexItemBuilder marginRight(final double value) {
                 this.marginRight = value;
                 return this;
             }
 
-            public Builder marginBottom(final double value) {
+            public DefaultFlexItemBuilder marginBottom(final double value) {
                 this.marginBottom = value;
                 return this;
             }
 
-            public Builder flexGrow(final float value) {
+            public DefaultFlexItemBuilder flexGrow(final float value) {
                 this.flexGrow = value;
                 return this;
             }
 
-            public Builder flexAlignSelf(final AlignSelf value) {
+            public DefaultFlexItemBuilder flexAlignSelf(final AlignSelf value) {
                 this.flexAlignSelf = value;
                 return this;
             }
 
-            public Builder flexShrink(final float value) {
+            public DefaultFlexItemBuilder flexShrink(final float value) {
                 this.flexShrink = value;
                 return this;
             }
 
-            public Builder flexBasisPercent(final float value) {
+            public DefaultFlexItemBuilder flexBasisPercent(final float value) {
                 this.flexBasisPercent = value;
                 return this;
             }
 
-            public Builder order(final int value) {
+            public DefaultFlexItemBuilder order(final int value) {
                 this.order = value;
                 return this;
             }
@@ -928,8 +933,8 @@ public final class FlexboxLayout {
             }
         }
 
-        public static DefaultFlexItem.Builder builder() {
-            return new DefaultFlexItem.Builder();
+        public static DefaultFlexItemBuilder builder() {
+            return new DefaultFlexItemBuilder();
         }
 
         private DefaultFlexItem(final boolean wrapBefore, final double width, final double height, final double minWidth, final double minHeight, final double maxWidth, final double maxHeight, final double marginLeft, final double marginTop, final double marginRight, final double marginBottom, final float flexGrow, final float flexShrink, final float flexBasisPercent, final int order, final AlignSelf alignSelf) {
@@ -1054,8 +1059,7 @@ public final class FlexboxLayout {
             STRETCH,
             AUTO
         }
-        
-       
+
         public static final float FLEX_GROW_DEFAULT = 0;
         public static final float FLEX_SHRINK_DEFAULT = 1;
         public static final int FLEX_BASIS_PERCENT_DEFAULT = -1;

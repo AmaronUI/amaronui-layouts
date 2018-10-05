@@ -29,11 +29,12 @@ package com.dukescript.layouts.flexbox;
  *  questions.
  * #L%
  */
-
-
-
 public class Bounds {
-   double x,y,w,h;
+
+    private double x;
+    private double y;
+    private double w;
+    private double h;
 
     public Bounds(double x, double y, double w, double h) {
         this.x = x;
@@ -76,8 +77,7 @@ public class Bounds {
 
     @Override
     public String toString() {
-        return ""+x+", "+y+", "+w+", "+h;
+        return "x= " + x + ", y= " + y + ", w= " + w + ", h= " + h;
     }
-   
-    
+
 }
