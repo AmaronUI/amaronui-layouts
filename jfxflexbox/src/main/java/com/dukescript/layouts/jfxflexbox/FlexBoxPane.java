@@ -72,10 +72,11 @@ import javafx.scene.layout.Pane;
  * }
  * </pre>
  *
- * For more info about the Layout algorithm itself and the meaning of the properties
- * please checkout the specification: 
- * https://www.w3.org/TR/css-flexbox-1/
- * We tried to follow the spec as closely as possible where applicable (but obviously this isn't css).
+ * For more info about the Layout algorithm itself and the meaning of the
+ * properties please checkout the specification:
+ * https://www.w3.org/TR/css-flexbox-1/ We tried to follow the spec as closely
+ * as possible where applicable (but obviously this isn't css).
+ *
  * @author antonepple
  */
 public class FlexBoxPane extends Pane {
@@ -100,60 +101,66 @@ public class FlexBoxPane extends Pane {
         layout.setJustifyContent(JustifyContent.CENTER);
     }
 
-    
     /**
-     * Set the "Margin" layout contraint for this child. 
+     * Set the "Margin" layout contraint for this child.
+     *
      * @param child
-     * @param insets 
+     * @param insets
      */
     public static void setMargin(Node child, Insets insets) {
         setConstraint(child, MARGIN_CONSTRAINT, insets);
     }
 
-     /**
+    /**
      * Set the "Order" layout contraint for this child. Use to reorder the items
      * directly. -1 places the item at the line start.
-     * @param child 
-     * @param order 
+     *
+     * @param child
+     * @param order
      */
     public static void setOrder(Node child, int order) {
         setConstraint(child, ORDER_CONSTRAINT, order);
     }
 
-     /**
-     * Set the "flex-grow" layout contraint for this child. It defines how  space
+    /**
+     * Set the "flex-grow" layout contraint for this child. It defines how space
      * is distributed among the items. By default all items have a value of 1.
-     * If you were to give one of the children a value of 2, that child would 
+     * If you were to give one of the children a value of 2, that child would
      * take up twice as much space as the others.
-     * @param child 
-     * @param grow 
+     *
+     * @param child
+     * @param grow
      */
     public static void setGrow(Node child, float grow) {
         setConstraint(child, FLEX_GROW, grow);
     }
-    
-     /**
-     * Set the "flex-shrink" layout contraint for this child. It defines how much
-     * the items will shrink if there's not enough space.
+
+    /**
+     * Set the "flex-shrink" layout contraint for this child. It defines how
+     * much the items will shrink if there's not enough space.
+     *
      * @param child
-     * @param shrink 
+     * @param shrink
      */
     public static void setShrink(Node child, float shrink) {
         setConstraint(child, FLEX_SHRINK, shrink);
     }
-     /**
-     * Set the "flex-basis-percent" layout contraint for this child. 
-     * @param child 
-     * @param f 
+
+    /**
+     * Set the "flex-basis-percent" layout contraint for this child.
+     *
+     * @param child
+     * @param f
      */
     public static void setFlexBasisPercent(Node child, float f) {
         setConstraint(child, FLEX_BASIS_PERCENT, f);
     }
 
-     /**
-     * Set the "flex-basis-percent" layout contraint for this child. 
-     * @param child 
-     * @param f 
+    /**
+     * Set the "flex-basis-percent" layout contraint for this child.
+     *
+     * @param child
+     * @param f
      */
     public static void setFlexBasisPercent(Node child, int f) {
         setConstraint(child, FLEX_ALIGN_SELF, f);
@@ -187,11 +194,14 @@ public class FlexBoxPane extends Pane {
 
     @Override
     protected void layoutChildren() {
-        super.layoutChildren(); 
+        super.layoutChildren();
         layout.layoutSubViews(getMainSize(), getCrossSize());
-        
+
         minMainSize = layout.getMinMainSize();
         minCrossSize = layout.getMinCrossSize();
+        getChildren().stream().filter(e-> !e.isManaged()).forEach(
+                e-> e.resizeRelocate(e.getLayoutX(), e.getLayoutY(),e.prefWidth(-1),e.prefHeight(-1))
+        );
     }
 
     @Override
@@ -204,7 +214,9 @@ public class FlexBoxPane extends Pane {
                     // TODO could be faster, if you deal with individual changes instead of replacing the full list
                     layout.clearItems();
                     for (Node child : children) {
-                        layout.add(new FlexItemImpl(child));
+                        if (child.isManaged()) {
+                            layout.add(new FlexItemImpl(child));
+                        }
                     }
                 }
             };

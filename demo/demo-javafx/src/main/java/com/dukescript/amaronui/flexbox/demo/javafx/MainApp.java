@@ -44,6 +44,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -146,7 +147,11 @@ public class MainApp extends Application {
             flex.getChildren().add(l);
         }
         FlexBoxPane.setShrink(flex.getChildren().get(1), 3.0f);
-
+        Button button = new Button("unmanaged");
+        button.setManaged(false);
+        button.setLayoutX(100);
+        button.setLayoutY(100);
+        flex.getChildren().add(button);
         Scene scene = new Scene(root, 200, 200);
         scene.getStylesheets().add("/com/dukescript/native4j/jfxflexbox/styles.css");
 
