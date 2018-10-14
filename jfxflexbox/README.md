@@ -35,6 +35,12 @@ You can use it like any other JavaFX Layout Pane:
 
 ## Release Info
 
+
+### Current Development Version 1.0-SNAPSHOT
+
+changed setShrink access to public
+Support for unmanaged Nodes
+
 ### Version 0.2 (04.10.2018)
 
 Incompatible change: Replaced int constants with Enums in FlexBoxLayout and FlexItem
