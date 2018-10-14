@@ -138,7 +138,7 @@ public class FlexBoxPane extends Pane {
      * @param child
      * @param shrink 
      */
-    static void setShrink(Node child, float shrink) {
+    public static void setShrink(Node child, float shrink) {
         setConstraint(child, FLEX_SHRINK, shrink);
     }
      /**
@@ -185,25 +185,11 @@ public class FlexBoxPane extends Pane {
     double minMainSize;
     double minCrossSize;
 
-//    @Override
-//    public Orientation getContentBias() {
-//        return layout.isHorizontal()?Orientation.HORIZONTAL:Orientation.VERTICAL;
-//    }
-//
-//    @Override
-//    protected double computeMinHeight(double width) {
-//        return layout.isHorizontal()? minCrossSize:minMainSize;
-//    }
-//    
-//    @Override
-//    protected double computeMinWidth(double width) {
-//        return layout.isHorizontal()? minMainSize:minCrossSize;
-//    }
     @Override
     protected void layoutChildren() {
-        super.layoutChildren(); //To change body of generated methods, choose Tools | Templates.
+        super.layoutChildren(); 
         layout.layoutSubViews(getMainSize(), getCrossSize());
-
+        
         minMainSize = layout.getMinMainSize();
         minCrossSize = layout.getMinCrossSize();
     }
