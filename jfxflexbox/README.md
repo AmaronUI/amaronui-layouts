@@ -38,7 +38,9 @@ You can use it like any other JavaFX Layout Pane:
 
 ### Current Development Version 1.0-SNAPSHOT
 
-changed setShrink access to public
+### Version 0.3 (14.10.2018)
+
+Changed setShrink to public access
 
 Support for unmanaged Nodes
 
