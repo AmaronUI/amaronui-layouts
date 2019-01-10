@@ -138,7 +138,7 @@
             <id>release</id>
             <build>
                 <plugins>
-                     <plugin>
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <executions>
@@ -176,59 +176,56 @@
                 </property>
             </activation>
             <build>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>license-maven-plugin</artifactId>
-                            <version>1.16</version>
-                            <configuration>
-                                <inceptionYear>2018</inceptionYear>
-                                <organizationName>Dukehoff GmbH</organizationName>
-                                <licenseName>gplv2_ce</licenseName>
-                                <licenseResolver>classpath://license</licenseResolver>
-                                <failOnMissingHeader>true</failOnMissingHeader>
-                                <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
-                                <failIfWarning>true</failIfWarning>
-                                <!--<dryRun>true</dryRun>
-                                failOnMissingHeader is supposed to only work with this
-                                property set, but I can't see a difference -->
-                                <!--<canUpdateDescription>true</canUpdateDescription>
-                                this causes the build to fail no matter what-->
-                                <canUpdateCopyright>true</canUpdateCopyright>
-                                <descriptionTemplate>src/license/header.ftl</descriptionTemplate>                            
-                                <roots>
-                                    <root>src/main/java</root>
-                                    <root>src/test</root>
-                                </roots>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <id>first</id>
-                                    <phase>generate-sources</phase>
-                                    <goals>
-                                        <goal>update-file-header</goal>     
-                                    </goals>
-                                </execution>
-                                <execution>
-                                    <phase>verify</phase>
-                                    <goals>
-                                        <goal>check-file-header</goal>     
-                                    </goals>
-                                </execution>
-                            </executions>
-                            <dependencies>
-                                <dependency>
-                                    <groupId>com.dukescript.amaronui</groupId>
-                                    <artifactId>gplv2cpe-license-resolver</artifactId>
-                                    <version>${project.version}</version>
-                                </dependency>
-                            </dependencies>
-                        </plugin>
-                    </plugins>
-            </build>
-            
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <version>1.16</version>
+                        <configuration>
+                            <inceptionYear>2018</inceptionYear>
+                            <organizationName>Dukehoff GmbH</organizationName>
+                            <licenseName>gplv2_ce</licenseName>
+                            <licenseResolver>classpath://license</licenseResolver>
+                            <failOnMissingHeader>true</failOnMissingHeader>
+                            <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
+                            <failIfWarning>true</failIfWarning>
+                            <!--<dryRun>true</dryRun>
+                            failOnMissingHeader is supposed to only work with this
+                            property set, but I can't see a difference -->
+                            <!--<canUpdateDescription>true</canUpdateDescription>
+                            this causes the build to fail no matter what-->
+                            <canUpdateCopyright>true</canUpdateCopyright>
+                            <descriptionTemplate>src/license/header.ftl</descriptionTemplate>                            
+                            <roots>
+                                <root>src/main/java</root>
+                                <root>src/test</root>
+                            </roots>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>first</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>update-file-header</goal>     
+                                </goals>
+                            </execution>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check-file-header</goal>     
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.dukescript.amaronui</groupId>
+                                <artifactId>gplv2cpe-license-resolver</artifactId>
+                                <version>${project.version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>           
         </profile>
-        
     </profiles>
-    
 </project>

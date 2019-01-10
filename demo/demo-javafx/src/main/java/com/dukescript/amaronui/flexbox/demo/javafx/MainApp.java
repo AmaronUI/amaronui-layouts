@@ -29,7 +29,6 @@ package com.dukescript.amaronui.flexbox.demo.javafx;
  *  questions.
  * #L%
  */
-
 import com.dukescript.layouts.flexbox.FlexboxLayout;
 import com.dukescript.layouts.flexbox.FlexboxLayout.AlignContent;
 import com.dukescript.layouts.flexbox.FlexboxLayout.AlignItems;
@@ -44,12 +43,11 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
@@ -68,7 +66,7 @@ public class MainApp extends Application {
         ChoiceBox<JustifyContent> justifyContent = new ChoiceBox<>(justifyChoices);
         justifyContent.setOnAction(e -> {
             JustifyContent selectedItem = justifyContent.getSelectionModel().getSelectedItem();
-            flex.setJustifyContent(selectedItem);       
+            flex.setJustifyContent(selectedItem);
         });
         justifyContent.getSelectionModel().select(JustifyContent.FLEX_START);
         ObservableList<FlexWrap> flexWrapChoices = FXCollections.observableArrayList();
@@ -123,7 +121,18 @@ public class MainApp extends Application {
         });
         flexAlignContent.getSelectionModel().select(AlignContent.CENTER);
 
-        VBox toolbar = new VBox(flexWrap, flexDirection, justifyContent, flexAlignContent, flexAlignItems);
+        GridPane toolbar = new GridPane();
+        toolbar.add(new Label("flex-wrap"), 0, 0);
+        toolbar.add(flexWrap, 1, 0);
+
+        toolbar.add(new Label("flex-direction"), 0, 1);
+        toolbar.add(flexDirection, 1, 1);
+        toolbar.add(new Label("justify-content"), 0, 2);
+        toolbar.add(justifyContent, 1, 2);
+        toolbar.add(new Label("flex-align-content"),  0,3 );
+        toolbar.add(flexAlignContent, 1, 3);
+        toolbar.add(new Label("flex-align-tems"), 0,4);
+        toolbar.add(flexAlignItems, 1, 4);
         toolbar.setAlignment(Pos.CENTER);
         Scene sceneTools = new Scene(toolbar, 300, 300);
         Stage stage1 = new Stage();
@@ -147,11 +156,11 @@ public class MainApp extends Application {
             flex.getChildren().add(l);
         }
         FlexBoxPane.setShrink(flex.getChildren().get(1), 3.0f);
-        Button button = new Button("unmanaged");
-        button.setManaged(false);
-        button.setLayoutX(100);
-        button.setLayoutY(100);
-        flex.getChildren().add(button);
+//        Button button = new Button("unmanaged");
+//        button.setManaged(false);
+//        button.setLayoutX(100);
+//        button.setLayoutY(100);
+//        flex.getChildren().add(button);
         Scene scene = new Scene(root, 200, 200);
         scene.getStylesheets().add("/com/dukescript/native4j/jfxflexbox/styles.css");
 
@@ -171,6 +180,5 @@ public class MainApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 
 }

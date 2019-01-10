@@ -4,7 +4,7 @@ package com.dukescript.layouts.jfxflexbox;
  * #%L
  * jfxflexbox - a library from the "DukeScript Layouts" project.
  * %%
- * Copyright (C) 2018 Dukehoff GmbH
+ * Copyright (C) 2018 - 2019 Dukehoff GmbH
  * %%
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 

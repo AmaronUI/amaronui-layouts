@@ -4,7 +4,7 @@ package com.dukescript.layouts.flexbox;
  * #%L
  * flexbox - a library from the "DukeScript Layouts" project.
  * %%
- * Copyright (C) 2018 Dukehoff GmbH
+ * Copyright (C) 2018 - 2019 Dukehoff GmbH
  * %%
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
@@ -29,7 +29,6 @@ package com.dukescript.layouts.flexbox;
  *  questions.
  * #L%
  */
-
 import com.dukescript.layouts.flexbox.FlexboxLayout.AlignContent;
 import com.dukescript.layouts.flexbox.FlexboxLayout.AlignItems;
 import com.dukescript.layouts.flexbox.FlexboxLayout.DefaultFlexItem;
@@ -39,9 +38,11 @@ import com.dukescript.layouts.flexbox.FlexboxLayout.FlexItemBase;
 import com.dukescript.layouts.flexbox.FlexboxLayout.FlexWrap;
 import com.dukescript.layouts.flexbox.FlexboxLayout.JustifyContent;
 import java.util.List;
-import org.junit.AfterClass;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -49,17 +50,6 @@ import org.junit.Test;
  * @author antonepple
  */
 public class FlexBoxLayoutTest {
-
-    public FlexBoxLayoutTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
 
     @Test
     public void testCalculateFlexLinesNumLines() {
@@ -101,6 +91,35 @@ public class FlexBoxLayoutTest {
         flexboxLayout.calculateFlexLines(100);
         Assert.assertEquals(1, flexboxLayout.flexLines.size());
         Assert.assertEquals(151, flexboxLayout.flexLines.get(0).getMinMainSize(), 0.0001);
+    }
+
+    /**
+     * Bug report from user
+     */
+    @Test
+    public void testSingleRowHeight() {
+//        Logger rootLogger = LogManager.getLogManager().getLogger("");
+//        rootLogger.setLevel(Level.FINEST);
+//        for (Handler h : rootLogger.getHandlers()) {
+//            h.setLevel(Level.FINEST);
+//        }
+        FlexboxLayout flexboxLayout = new FlexboxLayout();
+        flexboxLayout.setFlexDirection(FlexDirection.ROW);
+        flexboxLayout.setFlexWrap(FlexWrap.WRAP);
+        flexboxLayout.setJustifyContent(JustifyContent.FLEX_START);
+        flexboxLayout.setAlignItems(AlignItems.STRETCH);
+        flexboxLayout.setAlignContent(AlignContent.STRETCH);
+
+        FlexItemBase flexItemImpl1 = DefaultFlexItem.builder().minWidth(50).height(50).build();
+        flexboxLayout.add(flexItemImpl1);
+        FlexItemBase flexItemImpl2 = DefaultFlexItem.builder().minWidth(50).height(50).build();
+        flexboxLayout.add(flexItemImpl2);
+
+//        flexboxLayout.layoutSubViews(80, 400);
+//        Assert.assertEquals(200, flexItemImpl1.bounds.getH(), 0.001);
+        flexboxLayout.layoutSubViews(100, 400);
+        Assert.assertEquals(400, flexItemImpl1.bounds.getH(), 0.001);
+
     }
 
     @Test
@@ -296,17 +315,17 @@ public class FlexBoxLayoutTest {
         Assert.assertEquals(5, flexItem.crossStartPos, 0.001);
         Assert.assertEquals(5, flexItem2.crossStartPos, 0.001);
         Assert.assertEquals(110, flexItem.getMainTargetSize(), 0.001);
-        Assert.assertEquals( 5, flexItem.bounds.getX(),0.001);
-        Assert.assertEquals( 50, flexItem.bounds.getH(),0.001);
-        Assert.assertEquals( 100, flexItem.bounds.getW(),0.001);
+        Assert.assertEquals(5, flexItem.bounds.getX(), 0.001);
+        Assert.assertEquals(50, flexItem.bounds.getH(), 0.001);
+        Assert.assertEquals(100, flexItem.bounds.getW(), 0.001);
         Assert.assertEquals(110, flexItem2.getMainTargetSize(), 0.001);
-        Assert.assertEquals( 115, flexItem2.bounds.getX(),0.001);
-        Assert.assertEquals( 5, flexItem2.bounds.getY(),0.001);
-        Assert.assertEquals( 50, flexItem2.bounds.getH(),0.001);
-        Assert.assertEquals( 100, flexItem2.bounds.getW(),0.001);
-        
+        Assert.assertEquals(115, flexItem2.bounds.getX(), 0.001);
+        Assert.assertEquals(5, flexItem2.bounds.getY(), 0.001);
+        Assert.assertEquals(50, flexItem2.bounds.getH(), 0.001);
+        Assert.assertEquals(100, flexItem2.bounds.getW(), 0.001);
+
     }
-    
+
     @Test
     public void testMargin() {
         FlexboxLayout layout = new FlexboxLayout();
@@ -321,24 +340,24 @@ public class FlexBoxLayoutTest {
         layout.add(flexItem2);
         layout.layoutSubViews(220, 400);
         Assert.assertEquals(110, flexItem.getMainTargetSize(), 0.001);
-        Assert.assertEquals( 5, flexItem.bounds.getX(),0.001);
-        Assert.assertEquals( 20, flexItem.bounds.getH(),0.001);
-        Assert.assertEquals( 100, flexItem.bounds.getW(),0.001);
+        Assert.assertEquals(5, flexItem.bounds.getX(), 0.001);
+        Assert.assertEquals(20, flexItem.bounds.getH(), 0.001);
+        Assert.assertEquals(100, flexItem.bounds.getW(), 0.001);
         Assert.assertEquals(110, flexItem2.getMainTargetSize(), 0.001);
-        Assert.assertEquals( 115, flexItem2.bounds.getX(),0.001);
-        Assert.assertEquals( 5, flexItem2.bounds.getY(),0.001);
-        Assert.assertEquals( 20, flexItem2.bounds.getH(),0.001);
-        Assert.assertEquals( 100, flexItem2.bounds.getW(),0.001);
+        Assert.assertEquals(115, flexItem2.bounds.getX(), 0.001);
+        Assert.assertEquals(5, flexItem2.bounds.getY(), 0.001);
+        Assert.assertEquals(20, flexItem2.bounds.getH(), 0.001);
+        Assert.assertEquals(100, flexItem2.bounds.getW(), 0.001);
         layout.layoutSubViews(120, 400);
         Assert.assertEquals(110, flexItem.getMainTargetSize(), 0.001);
-        Assert.assertEquals( 5, flexItem.bounds.getX(),0.001);
-        Assert.assertEquals( 20, flexItem.bounds.getH(),0.001);
-        Assert.assertEquals( 100, flexItem.bounds.getW(),0.001);
+        Assert.assertEquals(5, flexItem.bounds.getX(), 0.001);
+        Assert.assertEquals(20, flexItem.bounds.getH(), 0.001);
+        Assert.assertEquals(100, flexItem.bounds.getW(), 0.001);
         Assert.assertEquals(110, flexItem2.getMainTargetSize(), 0.001);
-        Assert.assertEquals( 5, flexItem2.bounds.getX(),0.001);
-        Assert.assertEquals( 35, flexItem2.bounds.getY(),0.001);
-        Assert.assertEquals( 20, flexItem2.bounds.getH(),0.001);
-        Assert.assertEquals( 100, flexItem2.bounds.getW(),0.001);
+        Assert.assertEquals(5, flexItem2.bounds.getX(), 0.001);
+        Assert.assertEquals(35, flexItem2.bounds.getY(), 0.001);
+        Assert.assertEquals(20, flexItem2.bounds.getH(), 0.001);
+        Assert.assertEquals(100, flexItem2.bounds.getW(), 0.001);
     }
 
 }

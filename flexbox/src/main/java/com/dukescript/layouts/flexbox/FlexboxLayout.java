@@ -4,7 +4,7 @@ package com.dukescript.layouts.flexbox;
  * #%L
  * flexbox - a library from the "DukeScript Layouts" project.
  * %%
- * Copyright (C) 2018 Dukehoff GmbH
+ * Copyright (C) 2018 - 2019 Dukehoff GmbH
  * %%
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
@@ -167,7 +167,7 @@ public final class FlexboxLayout {
     private FlexWrap flexWrap;
     private JustifyContent justifyContent = JustifyContent.FLEX_START;
     private AlignItems alignItems = AlignItems.STRETCH;
-    private AlignContent alignContent;
+    private AlignContent alignContent = AlignContent.FLEX_START;
     final List<FlexLine> flexLines = new ArrayList<>();
     private final List<FlexItem> originalItems = new ArrayList<>();
     private List<FlexItem> items;
@@ -239,12 +239,13 @@ public final class FlexboxLayout {
 
     void alignContent(double crossSize) {
         minCrossSize = 0;
-        if (flexLines.size() <= 1) {
-            if (flexLines.size() == 1) {
-                minCrossSize = flexLines.get(0).getMinCrossSize();
-            }
-            return; // nothing to do according to spec
-        }
+        if (flexLines.size()==0)return;
+//        if (flexLines.size() <= 1) {
+//            if (flexLines.size() == 1) {
+//                minCrossSize = flexLines.get(0).getMinCrossSize();
+//            }
+//            return; // nothing to do according to spec
+//        }
 
         for (FlexLine flexLine : flexLines) {
             minCrossSize += flexLine.getMinCrossSize();
@@ -567,7 +568,7 @@ public final class FlexboxLayout {
 
             return;
         }
-        LOG.finest("flex-wrap is not FLEX_WRAP_NOWRAP");
+        else LOG.finest("flex-wrap is not FLEX_WRAP_NOWRAP");
         double minSize = 0;
 
         for (FlexItem item : items) {
