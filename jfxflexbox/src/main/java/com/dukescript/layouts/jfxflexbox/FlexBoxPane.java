@@ -162,7 +162,7 @@ public class FlexBoxPane extends Pane {
      * @param child
      * @param f
      */
-    public static void setFlexBasisPercent(Node child, int f) {
+    public static void setFlexAlignSelf(Node child, int f) {
         setConstraint(child, FLEX_ALIGN_SELF, f);
     }
 
