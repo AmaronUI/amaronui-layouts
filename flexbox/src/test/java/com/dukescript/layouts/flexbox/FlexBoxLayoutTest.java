@@ -127,7 +127,6 @@ public class FlexBoxLayoutTest {
         FlexboxLayout flexboxLayout = new FlexboxLayout();
         flexboxLayout.setFlexDirection(FlexDirection.ROW);
         flexboxLayout.setFlexWrap(FlexWrap.WRAP);
-
         FlexItemBase flexItemImpl1 = DefaultFlexItem.builder().minWidth(50).build();
         flexboxLayout.add(flexItemImpl1);
         DefaultFlexItem flexItemImpl2 = DefaultFlexItem.builder().minWidth(50).build();
@@ -142,6 +141,7 @@ public class FlexBoxLayoutTest {
         flexboxLayout.calculateFlexLines(100);
         Assert.assertEquals(1, flexboxLayout.flexLines.get(0).getFlexItems().size());
     }
+
 
     @Test
     public void testCalculateFlexLinesReversion() {
@@ -298,6 +298,7 @@ public class FlexBoxLayoutTest {
         Assert.assertEquals(40, flexItem.crossStartPos, 0.001);
         Assert.assertEquals(0, flexItem2.crossStartPos, 0.001);
     }
+    
 
     @Test
     public void testMarginAlignItems() {

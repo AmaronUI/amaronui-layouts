@@ -38,6 +38,14 @@ You can use it like any other JavaFX Layout Pane:
 
 ### Current Development Version 1.0-SNAPSHOT
 
+### Version 0.5 (10.03.2019)
+
+
+
+new logic for getWidth, so flexBasisPercent can have an effect
+
+fixed method name for flexAlignSelf
+
 ### Version 0.5 (09.03.2019)
 
 bugfix, order wasn't used in JavaFX version

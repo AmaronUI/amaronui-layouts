@@ -278,6 +278,7 @@ public class FlexBoxPane extends Pane {
         @Override
         public double getWidth() {
             double prefWidth = delegate.prefWidth(-1);
+            if (getFlexBasisPercent()<=0) return prefWidth;
             double minWidth = delegate.minWidth(-1);
             double maxWidth = delegate.maxWidth(-1);
             // if they are the same, we assume the component has a fixed width
@@ -288,6 +289,7 @@ public class FlexBoxPane extends Pane {
         @Override
         public double getHeight() {
             double prefHeight = delegate.prefHeight(-1);
+            if (getFlexBasisPercent()<=0)return prefHeight;
             double minHeight = delegate.minHeight(-1);
             double maxHeigt = delegate.maxHeight(-1);
             if(prefHeight == minHeight && minHeight == maxHeigt)
