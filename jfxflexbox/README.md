@@ -38,9 +38,9 @@ You can use it like any other JavaFX Layout Pane:
 
 ### Current Development Version 1.0-SNAPSHOT
 
-### Version 0.5 (10.03.2019)
+### Version 0.6 (10.03.2019)
 
-
+AlignSelf is correctly set as enum now
 
 new logic for getWidth, so flexBasisPercent can have an effect
 
