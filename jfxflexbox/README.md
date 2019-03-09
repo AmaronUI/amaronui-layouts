@@ -38,6 +38,16 @@ You can use it like any other JavaFX Layout Pane:
 
 ### Current Development Version 1.0-SNAPSHOT
 
+### Version 0.5 (09.03.2019)
+
+bugfix, order wasn't used in JavaFX version
+
+added a base style class ("flex-box-pane")
+
+### Version 0.4 (10.01.2019)
+
+fix for #1
+
 ### Version 0.3 (14.10.2018)
 
 Changed setShrink to public access
