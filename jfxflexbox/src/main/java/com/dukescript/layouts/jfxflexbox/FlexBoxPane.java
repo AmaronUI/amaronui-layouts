@@ -280,7 +280,7 @@ public class FlexBoxPane extends Pane {
             double prefWidth = delegate.prefWidth(-1);
             double minWidth = delegate.minWidth(-1);
             double maxWidth = delegate.maxWidth(-1);
-            // this is how you set a fix width in JavaFX
+            // if they are the same, we assume the component has a fixed width
             if (prefWidth == minWidth && minWidth == maxWidth) return prefWidth;
             return 0;
         }
