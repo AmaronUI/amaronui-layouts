@@ -7,7 +7,7 @@ The FlexBoxPane is available from Maven Central:
     <dependency>
       <groupId>com.dukescript.amaronui.layouts</groupId>
       <artifactId>jfxflexbox</artifactId>
-      <version>0.2</version>
+      <version>0.5</version>
     </dependency>
 
 FlexBoxPane is based on [this Java implementation of Flexbox](https://github.com/AmaronUI/amaronui-layouts/tree/master/flexbox).
