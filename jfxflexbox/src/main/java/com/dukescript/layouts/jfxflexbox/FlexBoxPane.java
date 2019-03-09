@@ -81,14 +81,13 @@ import javafx.scene.layout.Pane;
  */
 public class FlexBoxPane extends Pane {
 
-    private static String MARGIN_CONSTRAINT = "MARGIN_CONSTRAINT";
-    private static String ORDER_CONSTRAINT = "ORDER_CONSTRAINT";
+    private static final String MARGIN_CONSTRAINT = "MARGIN_CONSTRAINT";
+    private static final String ORDER_CONSTRAINT = "ORDER_CONSTRAINT";
     private static final String WRAP_BEFORE = "WRAP_BEFORE";
     private static final String FLEX_GROW = "FLEX_GROW";
     private static final String FLEX_SHRINK = "FLEX_SHRINK";
     private static final String FLEX_BASIS_PERCENT = "FLEX_BASIS_PERCENT";
     private static final String FLEX_ALIGN_SELF = "FLEX_ALIGN_SELF";
-    private static final String FLEX_ORDER = "FLEX_ORDER";
 
     private static Insets DEFAULT_MARGIN = new Insets(0);
 
@@ -351,7 +350,7 @@ public class FlexBoxPane extends Pane {
 
         @Override
         public int getOrder() {
-            return (int) getConstraint(delegate, FLEX_ORDER, 0);
+            return (int) getConstraint(delegate, ORDER_CONSTRAINT, 0);
         }
 
         @Override
