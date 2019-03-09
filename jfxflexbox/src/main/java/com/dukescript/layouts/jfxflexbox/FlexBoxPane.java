@@ -98,6 +98,7 @@ public class FlexBoxPane extends Pane {
         layout.setFlexDirection(FlexDirection.ROW);
         layout.setFlexWrap(FlexWrap.WRAP_REVERSE);
         layout.setJustifyContent(JustifyContent.CENTER);
+        getStyleClass().add("flex-box-pane");
     }
 
     /**
