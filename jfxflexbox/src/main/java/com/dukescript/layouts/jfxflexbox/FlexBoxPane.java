@@ -277,12 +277,22 @@ public class FlexBoxPane extends Pane {
 
         @Override
         public double getWidth() {
-            return delegate.prefWidth(-1);
+            double prefWidth = delegate.prefWidth(-1);
+            double minWidth = delegate.minWidth(-1);
+            double maxWidth = delegate.maxWidth(-1);
+            // this is how you set a fix width in JavaFX
+            if (prefWidth == minWidth && minWidth == maxWidth) return prefWidth;
+            return 0;
         }
 
         @Override
         public double getHeight() {
-            return delegate.prefHeight(-1);
+            double prefHeight = delegate.prefHeight(-1);
+            double minHeight = delegate.minHeight(-1);
+            double maxHeigt = delegate.maxHeight(-1);
+            if(prefHeight == minHeight && minHeight == maxHeigt)
+                return prefHeight;
+            return 0;
         }
 
         @Override
