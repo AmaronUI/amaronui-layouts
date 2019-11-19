@@ -81,14 +81,13 @@ import javafx.scene.layout.Pane;
  */
 public class FlexBoxPane extends Pane {
 
-    private static String MARGIN_CONSTRAINT = "MARGIN_CONSTRAINT";
-    private static String ORDER_CONSTRAINT = "ORDER_CONSTRAINT";
+    private static final String MARGIN_CONSTRAINT = "MARGIN_CONSTRAINT";
+    private static final String ORDER_CONSTRAINT = "ORDER_CONSTRAINT";
     private static final String WRAP_BEFORE = "WRAP_BEFORE";
     private static final String FLEX_GROW = "FLEX_GROW";
     private static final String FLEX_SHRINK = "FLEX_SHRINK";
     private static final String FLEX_BASIS_PERCENT = "FLEX_BASIS_PERCENT";
     private static final String FLEX_ALIGN_SELF = "FLEX_ALIGN_SELF";
-    private static final String FLEX_ORDER = "FLEX_ORDER";
 
     private static Insets DEFAULT_MARGIN = new Insets(0);
 
@@ -99,6 +98,7 @@ public class FlexBoxPane extends Pane {
         layout.setFlexDirection(FlexDirection.ROW);
         layout.setFlexWrap(FlexWrap.WRAP_REVERSE);
         layout.setJustifyContent(JustifyContent.CENTER);
+        getStyleClass().add("flex-box-pane");
     }
 
     /**
@@ -162,7 +162,7 @@ public class FlexBoxPane extends Pane {
      * @param child
      * @param f
      */
-    public static void setFlexBasisPercent(Node child, int f) {
+    public static void setFlexAlignSelf(Node child, FlexboxLayout.FlexItem.AlignSelf f) {
         setConstraint(child, FLEX_ALIGN_SELF, f);
     }
 
@@ -277,12 +277,24 @@ public class FlexBoxPane extends Pane {
 
         @Override
         public double getWidth() {
-            return delegate.prefWidth(-1);
+            double prefWidth = delegate.prefWidth(-1);
+            if (getFlexBasisPercent()<=0) return prefWidth;
+            double minWidth = delegate.minWidth(-1);
+            double maxWidth = delegate.maxWidth(-1);
+            // if they are the same, we assume the component has a fixed width
+            if (prefWidth == minWidth && minWidth == maxWidth) return prefWidth;
+            return 0;
         }
 
         @Override
         public double getHeight() {
-            return delegate.prefHeight(-1);
+            double prefHeight = delegate.prefHeight(-1);
+            if (getFlexBasisPercent()<=0)return prefHeight;
+            double minHeight = delegate.minHeight(-1);
+            double maxHeigt = delegate.maxHeight(-1);
+            if(prefHeight == minHeight && minHeight == maxHeigt)
+                return prefHeight;
+            return 0;
         }
 
         @Override
@@ -351,7 +363,7 @@ public class FlexBoxPane extends Pane {
 
         @Override
         public int getOrder() {
-            return (int) getConstraint(delegate, FLEX_ORDER, 0);
+            return (int) getConstraint(delegate, ORDER_CONSTRAINT, 0);
         }
 
         @Override

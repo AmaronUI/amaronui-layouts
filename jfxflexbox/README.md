@@ -7,7 +7,7 @@ The FlexBoxPane is available from Maven Central:
     <dependency>
       <groupId>com.dukescript.amaronui.layouts</groupId>
       <artifactId>jfxflexbox</artifactId>
-      <version>0.2</version>
+      <version>0.5</version>
     </dependency>
 
 FlexBoxPane is based on [this Java implementation of Flexbox](https://github.com/AmaronUI/amaronui-layouts/tree/master/flexbox).
@@ -37,6 +37,24 @@ You can use it like any other JavaFX Layout Pane:
 
 
 ### Current Development Version 1.0-SNAPSHOT
+
+### Version 0.6 (10.03.2019)
+
+AlignSelf is correctly set as enum now
+
+new logic for getWidth, so flexBasisPercent can have an effect
+
+fixed method name for flexAlignSelf
+
+### Version 0.5 (09.03.2019)
+
+bugfix, order wasn't used in JavaFX version
+
+added a base style class ("flex-box-pane")
+
+### Version 0.4 (10.01.2019)
+
+fix for #1
 
 ### Version 0.3 (14.10.2018)
 
